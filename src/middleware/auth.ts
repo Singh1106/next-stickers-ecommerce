@@ -6,7 +6,7 @@ import type { JWT_Decoded, NextApiRequestWithUser } from "../types/types";
 const auth = (handler: any) => {
   return async (req: NextApiRequestWithUser, res: NextApiResponse) => {
     try {
-      const token = req?.headers?.authorization?.replace("Bearer ", "");
+      const token = req?.headers?.authorization;
       const decoded = jwt.verify(
         token ?? "",
         process.env.JWT_TOKEN_KEY ?? ""

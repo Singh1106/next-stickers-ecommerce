@@ -16,9 +16,7 @@ const handler = async (
       try {
         req.user.tokens = req.user.tokens.filter(
           (token: { token: string; _id: string }) => {
-            return (
-              token.token !== req.headers.authorization?.replace("Bearer ", "")
-            );
+            return token.token !== req.headers.authorization;
           }
         );
         await req.user.save();
