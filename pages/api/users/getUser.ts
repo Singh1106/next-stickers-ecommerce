@@ -1,6 +1,5 @@
 import type { NextApiResponse } from "next";
 import type { NextApiRequestWithUser } from "../../../src/types/types";
-import connectDB from "../../../src/middleware/connectDB";
 import auth from "../../../src/middleware/auth";
 
 const handler = async (
@@ -9,18 +8,10 @@ const handler = async (
 ) => {
   const { method } = req;
 
-  await connectDB();
-
   switch (method) {
     case "GET":
       try {
-        req.user.tokens = req.user.tokens.filter(
-          (token: { token: string; _id: string }) => {
-            return token.token !== req.cookies?.OursiteJWT;
-          }
-        );
-        await req.user.save();
-        res.send("User logged out successfully");
+        res.json(req.user);
       } catch (e) {
         res.status(500).send(e);
       }

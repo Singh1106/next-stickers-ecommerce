@@ -3,8 +3,10 @@ import { Button, TextInput } from "@mantine/core";
 import styles from "./loginform.module.css";
 import useAuthStore from "../../store";
 import { login } from "./actions";
+import { useRouter } from "next/navigation";
 
 export const LoginForm = () => {
+  const router = useRouter();
   const user = useAuthStore((state: any) => state.user);
   const [formData, setFormData] = React.useState({
     email: "",
@@ -16,8 +18,11 @@ export const LoginForm = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const onLoginHandler = () => {
-    login(email, password);
+  const onLoginHandler = async () => {
+    const status = await login(email, password);
+    if (status === 200) {
+      router.push("/dashboard");
+    }
   };
   return (
     <div className={styles.container}>
@@ -38,7 +43,11 @@ export const LoginForm = () => {
         name="password"
         onChange={onChangeHandler}
       />
-      <Button className={styles.goaheadbtn} onClick={onLoginHandler}>
+      <Button
+        className={styles.goaheadbtn}
+        color="pink"
+        onClick={onLoginHandler}
+      >
         Go ahead.
       </Button>
       {/* Or you know. You can use this button.

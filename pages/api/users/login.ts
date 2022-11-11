@@ -3,6 +3,7 @@ import connectDB from "../../../src/middleware/connectDB";
 import User from "../../../src/models/user";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import { serialize } from "cookie";
 
 const handler = async (req: NextApiRequest, res: NextApiResponse<any>) => {
   const { method } = req;
@@ -26,8 +27,16 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<any>) => {
         );
         user.tokens = user.tokens.concat({ token });
         await user.save();
-        const email = user.email;
-        res.send({ token });
+        const serialised = serialize("OursiteJWT", token, {
+          httpOnly: true,
+          secure: process.env.NODE_ENV !== "development",
+          sameSite: "strict",
+          maxAge: 60 * 60 * 24 * 30,
+          path: "/",
+        });
+
+        res.setHeader("Set-Cookie", serialised);
+        res.json({ token });
       } catch (err) {
         console.log(err);
         res.status(400).send(err);
