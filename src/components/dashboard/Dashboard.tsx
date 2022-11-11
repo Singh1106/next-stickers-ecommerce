@@ -2,35 +2,36 @@ import React from "react";
 import styles from "./dashboard.module.css";
 import { getUser, logout } from "./actions";
 import { useRouter } from "next/navigation";
-import type { User } from "../../types/types";
+import useAuthStore from "../../store/index";
+import Link from "next/link";
 
 export const Dashboard = () => {
   const router = useRouter();
 
-  const [user, setUser] = React.useState<User | null>(null);
+  const { user, setUser } = useAuthStore((state: any) => state);
   const getAndSetUser = async () => {
     const res = await getUser();
-    if (res?.name) {
-      setUser(res);
+    if (res) {
+      setUser({
+        name: res.name,
+        email: res.email,
+        age: res.age,
+      });
     } else {
       router.push("/");
     }
   };
   const logoutHandler = () => {
     logout();
+    setUser(null);
     router.push("/");
   };
   React.useEffect(() => {
-    if (!user) {
-      getAndSetUser();
-    }
+    getAndSetUser();
   }, []);
   return (
     <div className={styles.container}>
-      Hello ji, Dashboard is here.
-      {user?.name}
-      {/* Or you know. You can use this button.
-      <Button className={styles.googlebtn}>Guggle</Button> */}
+      Hello ji, Dashboard is here. {user?.name}
       <button onClick={logoutHandler}>Here, Log yourself out.</button>
     </div>
   );

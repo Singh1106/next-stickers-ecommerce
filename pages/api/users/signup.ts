@@ -7,7 +7,6 @@ import bcrypt from "bcrypt";
 
 const handler = async (req: NextApiRequest, res: NextApiResponse<any>) => {
   const { method } = req;
-  console.log(req);
 
   await connectDB();
 

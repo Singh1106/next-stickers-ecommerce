@@ -29,8 +29,8 @@ const auth = (handler: any) => {
       }
       req.user = user;
       return handler(req, res);
-    } catch (e) {
-      console.log(e);
+    } catch (err) {
+      console.log(err);
       res.status(401).send({ error: "Please authenticate." });
     }
   };
