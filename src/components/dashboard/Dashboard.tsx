@@ -1,13 +1,14 @@
 import React from "react";
 import styles from "./dashboard.module.css";
-import { getUser, logout } from "./actions";
+import { getUser } from "./actions";
 import { useRouter } from "next/navigation";
 import useAuthStore from "../../store/index";
+import { NavbarMinimalColored } from "../navbar/NavbarMinimalColored";
 
 const Dashboard = () => {
   const router = useRouter();
 
-  const { user, setUser } = useAuthStore((state: any) => state);
+  const setUser = useAuthStore((state: any) => state.setUser);
   const getAndSetUser = async () => {
     const res = await getUser();
     if (res.code === 1) {
@@ -20,18 +21,12 @@ const Dashboard = () => {
       router.push("/");
     }
   };
-  const logoutHandler = () => {
-    logout();
-    setUser(null);
-    router.push("/");
-  };
   React.useEffect(() => {
     getAndSetUser();
   }, []);
   return (
     <div className={styles.container}>
-      Hello ji, Dashboard is here. {user?.name}
-      <button onClick={logoutHandler}>Here, Log yourself out.</button>
+      <NavbarMinimalColored />
     </div>
   );
 };
