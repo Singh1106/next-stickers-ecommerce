@@ -2,6 +2,7 @@ import type { NextApiResponse } from "next";
 import type { NextApiRequestWithUser } from "../../../src/types/types";
 import connectDB from "../../../src/middleware/connectDB";
 import auth from "../../../src/middleware/auth";
+import { serialize } from "cookie";
 
 const handler = async (
   req: NextApiRequestWithUser,
@@ -20,7 +21,23 @@ const handler = async (
           }
         );
         await req.user.save();
-        res.send("User logged out successfully");
+        res.setHeader("Set-Cookie", [
+          serialize("OursiteJWT", "false", {
+            httpOnly: true,
+            secure: process.env.NODE_ENV !== "development",
+            sameSite: true,
+            maxAge: 5,
+            path: "/",
+          }),
+        ]);
+        res
+          .status(200)
+          .json({
+            msg: "Successfully logged out",
+            code: 1,
+            roles: null,
+            auth: false,
+          });
       } catch (e) {
         res.status(500).send(e);
       }

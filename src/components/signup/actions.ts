@@ -14,7 +14,7 @@ export const signup = async (
   const body = JSON.stringify({ email, password, name, age });
   try {
     const res = await axios.post("/api/users/signup", body, config);
-    return res.status;
+    return res;
   } catch (err) {
     console.log(err);
   }

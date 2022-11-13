@@ -11,7 +11,11 @@ const handler = async (
   switch (method) {
     case "GET":
       try {
-        res.json(req.user);
+        res.json({
+          msg: "Successfully got user",
+          code: 1,
+          user: req.user,
+        });
       } catch (e) {
         res.status(500).send(e);
       }

@@ -9,7 +9,7 @@ export const login = async (email: string, password: string) => {
   const body = JSON.stringify({ email, password });
   try {
     const res = await axios.post("/api/users/login", body, config);
-    return res.status;
+    return res;
   } catch (err) {
     console.log(err);
   }

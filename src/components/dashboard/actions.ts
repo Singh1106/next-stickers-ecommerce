@@ -22,7 +22,7 @@ export const logout = async () => {
   };
   try {
     const res = await axios.get("/api/users/logout", config);
-    return res.data;
+    return res;
   } catch (err) {
     console.log(err);
   }

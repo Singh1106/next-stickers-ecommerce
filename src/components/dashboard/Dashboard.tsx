@@ -3,19 +3,18 @@ import styles from "./dashboard.module.css";
 import { getUser, logout } from "./actions";
 import { useRouter } from "next/navigation";
 import useAuthStore from "../../store/index";
-import Link from "next/link";
 
-export const Dashboard = () => {
+const Dashboard = () => {
   const router = useRouter();
 
   const { user, setUser } = useAuthStore((state: any) => state);
   const getAndSetUser = async () => {
     const res = await getUser();
-    if (res) {
+    if (res.code === 1) {
       setUser({
-        name: res.name,
-        email: res.email,
-        age: res.age,
+        name: res?.user.name,
+        email: res?.user.email,
+        age: res?.user.age,
       });
     } else {
       router.push("/");
@@ -36,3 +35,4 @@ export const Dashboard = () => {
     </div>
   );
 };
+export default Dashboard;

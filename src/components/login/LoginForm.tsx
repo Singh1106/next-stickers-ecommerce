@@ -5,6 +5,7 @@ import useAuthStore from "../../store";
 import { login } from "./actions";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { toast } from "react-toastify";
 
 export const LoginForm = () => {
   const router = useRouter();
@@ -20,8 +21,17 @@ export const LoginForm = () => {
   };
 
   const onLoginHandler = async () => {
-    const status = await login(email, password);
-    if (status === 200) {
+    const res = await toast.promise(login(email, password), {
+      pending: "Trying to log you in.",
+      success: {
+        render({ data }) {
+          return `${data?.data?.msg}`;
+        },
+        icon: false,
+      },
+      error: "What?? An error? Please try again...",
+    });
+    if (res?.data?.code === 1) {
       router.push("/dashboard");
     }
   };

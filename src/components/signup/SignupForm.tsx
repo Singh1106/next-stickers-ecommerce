@@ -4,6 +4,7 @@ import styles from "./signup.module.css";
 import { signup } from "./actions";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { toast } from "react-toastify";
 
 export const SignupForm = () => {
   const router = useRouter();
@@ -21,8 +22,17 @@ export const SignupForm = () => {
 
   const onSignupHandler = async () => {
     if (password === password2) {
-      const status = await signup(email, password, name, age);
-      if (status === 201) {
+      const res = await toast.promise(signup(email, password, name, age), {
+        pending: "Trying to sign you up.",
+        success: {
+          render({ data }) {
+            return `${data?.data?.msg}`;
+          },
+          icon: false,
+        },
+        error: "What?? An error? Please try again...",
+      });
+      if (res?.data.code === 1) {
         router.push("/");
       }
     }

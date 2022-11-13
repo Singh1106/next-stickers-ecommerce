@@ -31,7 +31,7 @@ const auth = (handler: any) => {
       return handler(req, res);
     } catch (err) {
       console.log(err);
-      res.status(401).send({ error: "Please authenticate." });
+      res.status(401).json({ msg: "Please authenticate.", code: -99 });
     }
   };
 };
