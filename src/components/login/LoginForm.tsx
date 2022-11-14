@@ -4,7 +4,6 @@ import styles from "./loginform.module.css";
 import useAuthStore from "../../store";
 import { login } from "./actions";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
 import { toast } from "react-toastify";
 
 export const LoginForm = () => {
@@ -71,7 +70,6 @@ export const LoginForm = () => {
         {/* Or you know. You can use this button.
       <Button className={styles.googlebtn}>Guggle</Button> */}
       </div>
-      <Link href="/signup">Not our user?</Link>
     </>
   );
 };

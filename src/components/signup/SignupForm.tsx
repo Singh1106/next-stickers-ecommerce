@@ -3,7 +3,6 @@ import { Button, TextInput } from "@mantine/core";
 import styles from "./signup.module.css";
 import { signup } from "./actions";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
 import { toast } from "react-toastify";
 
 export const SignupForm = () => {
@@ -21,6 +20,7 @@ export const SignupForm = () => {
   };
 
   const onSignupHandler = async () => {
+    console.log(formData);
     if (password === password2) {
       const res = await toast.promise(signup(email, password, name, age), {
         pending: "Trying to sign you up.",
@@ -36,6 +36,7 @@ export const SignupForm = () => {
         router.push("/");
       }
     }
+    toast.error("Passwords do not match.");
     return;
   };
   return (
@@ -84,7 +85,6 @@ export const SignupForm = () => {
         {/* Or you know. You can use this button.
       <Button className={styles.googlebtn}>Guggle</Button> */}
       </div>
-      <Link href="/">Our user?</Link>
     </>
   );
 };

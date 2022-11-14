@@ -24,10 +24,6 @@ const Dashboard = () => {
   React.useEffect(() => {
     getAndSetUser();
   }, []);
-  return (
-    <div className={styles.container}>
-      <NavbarMinimalColored />
-    </div>
-  );
+  return <div className={styles.container}>Dashboard</div>;
 };
 export default Dashboard;
