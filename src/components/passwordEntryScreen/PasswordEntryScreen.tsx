@@ -24,7 +24,7 @@ export const PasswordEntryScreen = () => {
 
   const onContinueHandler = async () => {
     if (userEntryType === UserEntryTypes.login) {
-      const res = await toast.promise(login(user.email, password), {
+      const res = await toast.promise(login(user?.email, password), {
         pending: "Trying to take you to dashboard...",
         success: {
           render({ data }) {
@@ -65,7 +65,7 @@ export const PasswordEntryScreen = () => {
           <h2>Next-Commerce-Store</h2>
           <h3>
             {userEntryType === 1
-              ? `Welcome back, ${user.email}`
+              ? `Welcome back, ${user?.email}`
               : `Ooooh, new user. Welcome.`}
           </h3>
           <h4>Please enter password to continue.</h4>

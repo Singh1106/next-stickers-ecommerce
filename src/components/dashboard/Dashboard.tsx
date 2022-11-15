@@ -49,6 +49,7 @@ const Dashboard = () => {
               name={product.name}
               desc={product.desc}
               imageURL={product.image}
+              key={index}
             />
           );
         })}
