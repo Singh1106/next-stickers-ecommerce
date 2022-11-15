@@ -35,11 +35,11 @@ const userSchema = new Schema(
     age: {
       type: Number,
       default: 0,
-      validate(value: number) {
-        if (value < 16) {
-          throw new Error("Age must be atleast 16");
-        }
-      },
+      // validate(value: number) {
+      //   if (value < 16) {
+      //     throw new Error("Age must be atleast 16");
+      //   }
+      // },
     },
     tokens: [
       {

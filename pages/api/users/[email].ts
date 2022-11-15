@@ -1,4 +1,5 @@
 import type { NextApiResponse } from "next";
+import connectDB from "../../../src/middleware/connectDB";
 import User from "../../../src/models/user";
 import type { NextApiRequestWithUser } from "../../../src/types/types";
 
@@ -8,6 +9,7 @@ const handler = async (
 ) => {
   const { method } = req;
   const { email } = req.query;
+  await connectDB();
 
   switch (method) {
     case "GET":
