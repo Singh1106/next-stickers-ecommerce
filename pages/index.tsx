@@ -1,5 +1,5 @@
-import { LoginForm } from "../src/components/login/LoginForm";
+import { EmailEntryScreen } from "../src/components/emailEntryScreen/EmailEntryScreen";
 
 export default function Home() {
-  return <LoginForm />;
+  return <EmailEntryScreen />;
 }
