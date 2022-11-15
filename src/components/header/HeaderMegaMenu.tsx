@@ -3,6 +3,7 @@ import Link from "next/link";
 import useAuthStore from "../../store";
 import { logout } from "../dashboard/actions";
 import { useRouter } from "next/navigation";
+import { toast } from "react-toastify";
 
 const useStyles = createStyles((theme) => ({
   link: {
@@ -40,12 +41,18 @@ const useStyles = createStyles((theme) => ({
 
 export function HeaderMegaMenu() {
   const router = useRouter();
-  const { user, setUser } = useAuthStore((state: any) => state);
+  const { setUser, isLoggedIn, setIsLoggedIn } = useAuthStore((state: any) => ({
+    setUser: state.setUser,
+    isLoggedIn: state.isLoggedIn,
+    setIsLoggedIn: state.setIsLoggedIn,
+  }));
   const { classes } = useStyles();
 
   const logoutHandler = () => {
     logout();
     setUser(null);
+    setIsLoggedIn(false);
+    toast("Logged out successfully.!!");
     router.push("/");
   };
 
@@ -53,7 +60,7 @@ export function HeaderMegaMenu() {
     <Box pb={120}>
       <Header height={60} px="md">
         <Group position="apart" sx={{ height: "100%" }}>
-          {user && (
+          {isLoggedIn && (
             <Group
               sx={{ height: "100%" }}
               spacing={0}
@@ -71,12 +78,11 @@ export function HeaderMegaMenu() {
             </Group>
           )}
           <Group className={classes.hiddenMobile}>
-            {user ? (
+            {isLoggedIn ? (
               <Button onClick={logoutHandler}>Logout</Button>
             ) : (
               <>
-                <Link href="/">Log in</Link>
-                <Link href="/signup">Sign up</Link>
+                <Link href="/">Continue Screen</Link>
               </>
             )}
           </Group>

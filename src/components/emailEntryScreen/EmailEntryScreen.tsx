@@ -1,27 +1,29 @@
 import React from "react";
 import { Button, TextInput } from "@mantine/core";
-import styles from "./loginform.module.css";
-import useAuthStore from "../../store";
-import { login } from "./actions";
+import styles from "./emailentryscreen.module.css";
+import { findUserByEmail } from "./actions";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
+import useAuthStore, { UserEntryTypes } from "../../store";
 
-export const LoginForm = () => {
+export const EmailEntryScreen = () => {
   const router = useRouter();
-  const user = useAuthStore((state: any) => state.user);
+  const { setUser, setUserEntryType } = useAuthStore((state: any) => ({
+    setUser: state.setUser,
+    setUserEntryType: state.setUserEntryType,
+  }));
   const [formData, setFormData] = React.useState({
     email: "",
-    password: "",
   });
-  const { email, password } = formData;
+  const { email } = formData;
 
   const onChangeHandler = (e: any) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const onLoginHandler = async () => {
-    const res = await toast.promise(login(email, password), {
-      pending: "Trying to log you in.",
+  const onEnterEmailHandler = async () => {
+    const res = await toast.promise(findUserByEmail(email), {
+      pending: "Wait.. Looking for you.",
       success: {
         render({ data }) {
           return `${data?.data?.msg}`;
@@ -31,20 +33,21 @@ export const LoginForm = () => {
       error: "What?? An error? Please try again...",
     });
     if (res?.data?.code === 1) {
-      router.push("/dashboard");
+      setUserEntryType(UserEntryTypes.login);
     }
+    if (res?.data?.code === 2) {
+      setUserEntryType(UserEntryTypes.register);
+    }
+    setUser({
+      email,
+    });
+    router.push("/2ndScreen");
   };
-  React.useEffect(() => {
-    // Todo: Shouldnt check from zustand, should check the token present.
-    if (user) {
-      router.push("/dashboard");
-    }
-  }, [user]);
   return (
     <>
       <div className={styles.container}>
         <div className={styles.title}>
-          <h2>LOGIN </h2>
+          <h2>CONTINUE </h2>
           <h3>at next-commerce-store</h3>
         </div>
         <TextInput
@@ -53,17 +56,10 @@ export const LoginForm = () => {
           name="email"
           onChange={onChangeHandler}
         />
-        <TextInput
-          label="The Password"
-          placeholder="Password entry."
-          type="password"
-          name="password"
-          onChange={onChangeHandler}
-        />
         <Button
           className={styles.goaheadbtn}
           color="pink"
-          onClick={onLoginHandler}
+          onClick={onEnterEmailHandler}
         >
           Go ahead.
         </Button>
