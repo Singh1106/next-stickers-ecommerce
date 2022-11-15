@@ -15,4 +15,6 @@ export interface User {
 
 export interface initialState {
   user: User;
+  userEntryType: number;
+  isLoggedIn: boolean;
 }

@@ -1,5 +1,5 @@
-import mongoose from 'mongoose';
-import validator from 'validator';
+import mongoose from "mongoose";
+import validator from "validator";
 
 const Schema = mongoose.Schema;
 
@@ -7,7 +7,6 @@ const userSchema = new Schema(
   {
     name: {
       type: String,
-      required: true,
       trim: true,
     },
     email: {
@@ -18,7 +17,7 @@ const userSchema = new Schema(
       lowercase: true,
       validate(value: string) {
         if (!validator.isEmail(value)) {
-          throw new Error('Email is invalid');
+          throw new Error("Email is invalid");
         }
       },
     },
@@ -28,7 +27,7 @@ const userSchema = new Schema(
       minlength: 1,
       trim: true,
       validate(value: string) {
-        if (value.toLowerCase().includes('password')) {
+        if (value.toLowerCase().includes("password")) {
           throw new Error('Password cannot contain "password"');
         }
       },
@@ -38,7 +37,7 @@ const userSchema = new Schema(
       default: 0,
       validate(value: number) {
         if (value < 16) {
-          throw new Error('Age must be atleast 16');
+          throw new Error("Age must be atleast 16");
         }
       },
     },
@@ -56,4 +55,4 @@ const userSchema = new Schema(
   }
 );
 
-export default mongoose.models.user || mongoose.model('user', userSchema);
+export default mongoose.models.user || mongoose.model("user", userSchema);
