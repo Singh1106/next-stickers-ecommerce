@@ -17,12 +17,13 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<any>) => {
       }
       break;
     case "POST":
-      const { name, desc, imageURL } = req.body;
+      const { name, desc, imageURL, price } = req.body;
       try {
         const newProduct = new Product({
           name,
           desc,
           image: imageURL,
+          price,
         });
         const product = await newProduct.save();
         res.json(product);

@@ -1,6 +1,6 @@
 import create from "zustand";
 import { devtools } from "zustand/middleware";
-import { initialState, User } from "../types/types";
+import { cartItem, initialState, User } from "../types/types";
 
 export enum UserEntryTypes {
   login = 1,
@@ -12,6 +12,7 @@ const useAuthStore = create(
     user: null,
     isLoggedIn: false,
     userEntryType: UserEntryTypes.login,
+    cart: [],
     setUser: (newUser: User) =>
       set((state: initialState) => ({
         ...state,
@@ -26,6 +27,18 @@ const useAuthStore = create(
       set((state: initialState) => ({
         ...state,
         isLoggedIn: newIsLoggedIn,
+      })),
+    setCart: (newCart: cartItem[]) =>
+      set((state: initialState) => ({
+        ...state,
+        cart: newCart,
+      })),
+    reset: () =>
+      set(() => ({
+        user: null,
+        isLoggedIn: false,
+        userEntryType: UserEntryTypes.login,
+        cart: [],
       })),
   }))
 );

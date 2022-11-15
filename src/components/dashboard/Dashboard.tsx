@@ -8,10 +8,9 @@ import { ProductCard } from "../productCard/ProductCard";
 
 const Dashboard = () => {
   const router = useRouter();
-  const { setUser } = useAuthStore((state: any) => ({
-    cart: state.cart,
+  const { setUser, setIsLoggedIn } = useAuthStore((state: any) => ({
     setUser: state.setUser,
-    setCart: state.setCart,
+    setIsLoggedIn: state.setIsLoggedIn,
   }));
   const [products, setProducts] = React.useState([]);
   const getAndSetUser = async () => {
@@ -22,6 +21,7 @@ const Dashboard = () => {
         email: res?.user.email,
         age: res?.user.age,
       });
+      setIsLoggedIn(true);
     } else {
       router.push("/");
     }
@@ -36,20 +36,21 @@ const Dashboard = () => {
   };
   React.useEffect(() => {
     getAndSetUser();
-  }, []);
-  React.useEffect(() => {
     getAndSetProducts();
   }, []);
+
   return (
     <div className={styles.container}>
       <div className={styles.productCard}>
         {products.map((product: any, index: number) => {
           return (
             <ProductCard
+              id={product._id}
               name={product.name}
               desc={product.desc}
               imageURL={product.image}
               key={index}
+              price={product.price}
             />
           );
         })}

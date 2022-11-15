@@ -41,17 +41,15 @@ const useStyles = createStyles((theme) => ({
 
 export function HeaderMegaMenu() {
   const router = useRouter();
-  const { setUser, isLoggedIn, setIsLoggedIn } = useAuthStore((state: any) => ({
-    setUser: state.setUser,
+  const { isLoggedIn, reset } = useAuthStore((state: any) => ({
     isLoggedIn: state.isLoggedIn,
-    setIsLoggedIn: state.setIsLoggedIn,
+    reset: state.reset,
   }));
   const { classes } = useStyles();
 
   const logoutHandler = () => {
     logout();
-    setUser(null);
-    setIsLoggedIn(false);
+    reset();
     toast("Logged out successfully.!!");
     router.push("/");
   };
@@ -79,7 +77,12 @@ export function HeaderMegaMenu() {
           )}
           <Group className={classes.hiddenMobile}>
             {isLoggedIn ? (
-              <Button onClick={logoutHandler}>Logout</Button>
+              <>
+                <Link href="/cart" className={classes.link}>
+                  Cart
+                </Link>
+                <Button onClick={logoutHandler}>Logout</Button>
+              </>
             ) : (
               <>
                 <Link href="/">Continue Screen</Link>

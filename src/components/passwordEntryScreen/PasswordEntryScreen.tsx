@@ -79,7 +79,7 @@ export const PasswordEntryScreen = () => {
         />
         <Button
           className={styles.goaheadbtn}
-          color="pink"
+          color="lightblue"
           onClick={onContinueHandler}
         >
           Continue.
