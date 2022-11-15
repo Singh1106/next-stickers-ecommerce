@@ -82,8 +82,7 @@ export function HeaderMegaMenu() {
               <Button onClick={logoutHandler}>Logout</Button>
             ) : (
               <>
-                <Link href="/">Log in</Link>
-                <Link href="/signup">Sign up</Link>
+                <Link href="/">Continue Screen</Link>
               </>
             )}
           </Group>

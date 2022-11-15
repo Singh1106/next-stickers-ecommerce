@@ -51,6 +51,7 @@ export const PasswordEntryScreen = () => {
         },
         error: "What?? An error? Please try again...",
       });
+      console.log(res);
       if (res?.data?.code === 1) {
         setIsLoggedIn(true);
         router.push("/dashboard");

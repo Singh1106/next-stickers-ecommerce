@@ -1,2 +1,2 @@
-import { PasswordEntryScreen } from "../../src/components/password entry screen/PasswordEntryScreen";
+import { PasswordEntryScreen } from "../../src/components/passwordEntryScreen/PasswordEntryScreen";
 export default PasswordEntryScreen;
