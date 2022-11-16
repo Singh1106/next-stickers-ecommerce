@@ -1,5 +1,15 @@
-.productCard {
-    max-width: 500px;
+.container {
+    align-items: center;
+    display: flex;
+    margin: auto;
+    padding: 15px;
+}
+
+.productCards {
     display: flex;
     flex-direction: row;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+;
+    
 }

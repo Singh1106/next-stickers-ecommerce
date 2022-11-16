@@ -1,13 +1,13 @@
 import axios from "axios";
-export const logout = async () => {
+export const getUser = async () => {
   const config = {
     headers: {
       "Content-Type": "application/json",
     },
   };
   try {
-    const res = await axios.get("/api/users/logout", config);
-    return res;
+    const res = await axios.get("/api/users/getUser", config);
+    return res.data;
   } catch (err) {
     console.log(err);
   }

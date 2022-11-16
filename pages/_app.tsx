@@ -10,7 +10,7 @@ export default function App({ Component, pageProps }: AppProps) {
     <Layout>
       <MantineProvider withGlobalStyles withNormalizeCSS>
         <Component {...pageProps} />
-        <ToastContainer autoClose={5000} position="bottom-right" />
+        <ToastContainer autoClose={3000} position="bottom-right" />
       </MantineProvider>
     </Layout>
   );

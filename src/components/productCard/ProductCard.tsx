@@ -10,10 +10,19 @@ import {
 import { toast } from "react-toastify";
 import useAuthStore from "../../store";
 import { cartItem } from "../../types/types";
+import styles from "./productcard.module.css";
+
 const useStyles = createStyles((theme) => ({
   card: {
     backgroundColor:
       theme.colorScheme === "dark" ? theme.colors.dark[7] : theme.white,
+    border: "2px solid #228be6",
+    margin: "10px",
+    height: "420px",
+    width: "250px",
+  },
+  detailsGroup: {
+    marginBottom: "10px",
   },
   imageSection: {
     padding: theme.spacing.md,
@@ -73,9 +82,9 @@ export function ProductCard({
   return (
     <Card withBorder radius="md" className={classes.card}>
       <Card.Section className={classes.imageSection}>
-        <Image src={imageURL} alt={name} />
+        <Image src={imageURL} alt={name} className={styles.image} />
       </Card.Section>
-      <Group position="apart" mt="md">
+      <Group position="apart" mt="md" className={classes.detailsGroup}>
         <div>
           <Text weight={500}>{name}</Text>
           <Text size="xs" color="dimmed">

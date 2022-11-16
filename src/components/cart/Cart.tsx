@@ -6,15 +6,16 @@ import {
   Group,
   Text,
   TextInput,
+  Button,
 } from "@mantine/core";
 import { IconSearch } from "@tabler/icons";
 import CartCounter from "../cartCounter/CartCounter";
+import styles from "./cart.module.css";
 
 const useStyles = createStyles((theme) => ({
   th: {
     padding: "0 !important",
   },
-
   control: {
     width: "100%",
     padding: `${theme.spacing.xs}px ${theme.spacing.md}px`,
@@ -53,8 +54,8 @@ function Th({ children }: ThProps) {
   const { classes } = useStyles();
   return (
     <th className={classes.th}>
-      <Group position="apart">
-        <Text weight={500} size="sm">
+      <Group position="left">
+        <Text weight={600} size="sm">
           {children}
         </Text>
       </Group>
@@ -74,6 +75,14 @@ function Cart({ data }: TableSortProps) {
     const { value } = event.currentTarget;
     setSearch(value);
   };
+
+  const getTotal = () => {
+    let total = 0;
+    data.map((filteredDataItem) => {
+      total += filteredDataItem.quantity * filteredDataItem.price;
+    });
+    return total;
+  };
   useEffect(() => {
     setFilteredData(filterData(data, search));
   }, [search, data.length]);
@@ -92,18 +101,20 @@ function Cart({ data }: TableSortProps) {
   ));
 
   return (
-    <ScrollArea>
+    <ScrollArea className={styles.cartContainer}>
       <TextInput
         placeholder="Search by name"
         mb="md"
         icon={<IconSearch size={14} stroke={1.5} />}
         value={search}
         onChange={handleSearchChange}
+        className={styles.searchBar}
       />
       <Table
         horizontalSpacing="md"
         verticalSpacing="xs"
         sx={{ tableLayout: "fixed", minWidth: 700 }}
+        className={styles.mainTable}
       >
         <thead>
           <tr>
@@ -126,6 +137,17 @@ function Cart({ data }: TableSortProps) {
           )}
         </tbody>
       </Table>
+      <div className={styles.totalContainer}>
+        Total price: {getTotal()}
+        <Button
+          variant="subtle"
+          compact
+          className={styles.checkoutBtn}
+          disabled={getTotal() === 0}
+        >
+          {getTotal() === 0 ? "Yo, do not go ahead." : "Yo, go ahead."}
+        </Button>
+      </div>
     </ScrollArea>
   );
 }

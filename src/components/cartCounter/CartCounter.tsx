@@ -51,9 +51,23 @@ const CartCounter = ({ children, id, name }: CartCounterProps) => {
   };
   return (
     <>
-      <Button onClick={incrementHandler}>+</Button>
+      <Button
+        variant="subtle"
+        onClick={decrementHandler}
+        className={styles.decrementBtn}
+        compact
+      >
+        -
+      </Button>
       {children}
-      <Button onClick={decrementHandler}>-</Button>
+      <Button
+        variant="subtle"
+        onClick={incrementHandler}
+        className={styles.incrementBtn}
+        compact
+      >
+        +
+      </Button>
     </>
   );
 };

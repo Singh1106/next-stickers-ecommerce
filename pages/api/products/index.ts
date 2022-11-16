@@ -26,7 +26,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<any>) => {
           price,
         });
         const product = await newProduct.save();
-        res.json(product);
+        res.json({ success: true, code: 1, data: product });
       } catch (error) {
         res
           .status(400)
