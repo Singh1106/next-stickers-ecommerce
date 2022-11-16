@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { isNamedTupleMember } from "typescript";
 import validator from "validator";
 
 const Schema = mongoose.Schema;
@@ -34,13 +35,34 @@ const userSchema = new Schema(
     },
     age: {
       type: Number,
-      default: 0,
+      default: 17,
       // validate(value: number) {
       //   if (value < 16) {
       //     throw new Error("Age must be atleast 16");
       //   }
       // },
     },
+    cart: [
+      {
+        id: {
+          type: String,
+          required: true,
+        },
+        name: {
+          type: String,
+          requied: true,
+        },
+        quantity: {
+          type: Number,
+          required: true,
+          default: 0,
+        },
+        price: {
+          type: Number,
+          required: true,
+        },
+      },
+    ],
     tokens: [
       {
         token: {

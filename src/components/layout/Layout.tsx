@@ -9,9 +9,10 @@ interface LayoutProps {
 
 export default function Layout({ children }: LayoutProps) {
   const router = useRouter();
-  const { setUser, setIsLoggedIn } = useAuthStore((state: any) => ({
+  const { setUser, setCart, isLoggedIn } = useAuthStore((state: any) => ({
     setUser: state.setUser,
-    setIsLoggedIn: state.setIsLoggedIn,
+    setCart: state.setCart,
+    isLoggedIn: state.isLoggedIn,
   }));
   const getAndSetUser = async () => {
     const res = await getUser();
@@ -21,14 +22,14 @@ export default function Layout({ children }: LayoutProps) {
         email: res?.user.email,
         age: res?.user.age,
       });
-      setIsLoggedIn(true);
+      setCart(res?.user?.cart);
     } else {
       router.push("/");
     }
   };
   React.useEffect(() => {
     getAndSetUser();
-  }, []);
+  }, [isLoggedIn]);
   return (
     <>
       <HeaderMegaMenu />

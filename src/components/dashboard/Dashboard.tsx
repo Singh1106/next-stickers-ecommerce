@@ -2,9 +2,13 @@ import React from "react";
 import styles from "./dashboard.module.css";
 import { getProducts } from "../productCard/actions";
 import { ProductCard } from "../productCard/ProductCard";
+import useAuthStore from "../../store";
 
 const Dashboard = () => {
   const [products, setProducts] = React.useState([]);
+  const { setIsLoggedIn } = useAuthStore((state: any) => ({
+    setIsLoggedIn: state.setIsLoggedIn,
+  }));
 
   const getAndSetProducts = async () => {
     const res = await getProducts();
@@ -14,6 +18,7 @@ const Dashboard = () => {
     }
   };
   React.useEffect(() => {
+    setIsLoggedIn(true);
     getAndSetProducts();
   }, []);
 

@@ -10,6 +10,7 @@ import {
 import { toast } from "react-toastify";
 import useAuthStore from "../../store";
 import { cartItem } from "../../types/types";
+import { updateCart } from "./actions";
 import styles from "./productcard.module.css";
 
 const useStyles = createStyles((theme) => ({
@@ -67,12 +68,15 @@ export function ProductCard({
     return item.length > 0;
   };
 
-  const addToCartHandler = () => {
+  const addToCartHandler = async () => {
     const isThisProductInCart = checkForProduct(cart);
     if (!isThisProductInCart) {
       const newCart = [...cart, { id, quantity: 1, name, price }];
-      setCart(newCart);
-      toast("Successfully added to cart.");
+      const res = await updateCart(newCart);
+      if (res?.data.code === 1) {
+        setCart(newCart);
+        toast("Successfully added to cart.");
+      }
       return;
     }
     toast.error(
