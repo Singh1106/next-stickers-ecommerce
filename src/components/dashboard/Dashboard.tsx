@@ -52,7 +52,11 @@ const Dashboard = () => {
       <Pagination
         page={activePage}
         onChange={setPage}
-        total={products.length === 10 ? activePage + 1 : activePage} // Jugaad. Useless Jugaad.
+        total={
+          products.length === PRODUCTS_PER_PAGE_LIMIT
+            ? activePage + 1
+            : activePage
+        } // Jugaad. Useless Jugaad.
         className={styles.pagination}
       />
     </div>
