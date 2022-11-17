@@ -59,32 +59,30 @@ export const PasswordEntryScreen = () => {
     }
   };
   return (
-    <>
-      <div className={styles.container}>
-        <div className={styles.title}>
-          <h2>Next-Commerce-Store</h2>
-          <h3>
-            {userEntryType === 1
-              ? `Welcome back, ${user?.email}`
-              : `Ooooh, new user. Welcome.`}
-          </h3>
-          <h4>Please enter password to continue.</h4>
-        </div>
-        <TextInput
-          label="The Password"
-          placeholder="Password entry."
-          name="password"
-          type="password"
-          onChange={onChangeHandler}
-        />
-        <Button
-          className={styles.goaheadbtn}
-          color="lightblue"
-          onClick={onContinueHandler}
-        >
-          Continue.
-        </Button>
+    <div className={styles.container}>
+      <div className={styles.title}>
+        <h2>Next-Commerce-Store</h2>
+        <h3>
+          {userEntryType === 1
+            ? `Welcome back, ${user?.email}`
+            : `Ooooh, new user. Welcome.`}
+        </h3>
+        <h4>Please enter password to continue.</h4>
       </div>
-    </>
+      <TextInput
+        label="The Password"
+        placeholder="Password entry."
+        name="password"
+        type="password"
+        onChange={onChangeHandler}
+      />
+      <Button
+        className={styles.goaheadbtn}
+        color="lightblue"
+        onClick={onContinueHandler}
+      >
+        Continue.
+      </Button>
+    </div>
   );
 };
