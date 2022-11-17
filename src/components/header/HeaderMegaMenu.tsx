@@ -1,7 +1,7 @@
 import { createStyles, Header, Group, Box, Button } from "@mantine/core";
 import Link from "next/link";
 import useAuthStore from "../../store";
-import { logout } from "../dashboard/actions";
+import { logout } from "./actions";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 

@@ -6,6 +6,8 @@ import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import useAuthStore, { UserEntryTypes } from "../../store";
 
+const EMAIL_regEx = /\S+@\S+\.\S+/;
+
 export const EmailEntryScreen = () => {
   const router = useRouter();
   const { setUser, setUserEntryType } = useAuthStore((state: any) => ({
@@ -60,6 +62,7 @@ export const EmailEntryScreen = () => {
           className={styles.goaheadbtn}
           color="pink"
           onClick={onEnterEmailHandler}
+          disabled={!EMAIL_regEx.test(email)}
         >
           Go ahead.
         </Button>

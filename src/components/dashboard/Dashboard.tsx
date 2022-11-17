@@ -1,17 +1,22 @@
 import React from "react";
 import styles from "./dashboard.module.css";
-import { getProducts } from "../productCard/actions";
+import { getProducts } from "./actions";
+import { Pagination } from "@mantine/core";
 import { ProductCard } from "../productCard/ProductCard";
 import useAuthStore from "../../store";
 
+const PRODUCTS_PER_PAGE_LIMIT = 10;
+
 const Dashboard = () => {
   const [products, setProducts] = React.useState([]);
-  const { setIsLoggedIn } = useAuthStore((state: any) => ({
+  const [activePage, setPage] = React.useState(1);
+  const { setIsLoggedIn, user } = useAuthStore((state: any) => ({
     setIsLoggedIn: state.setIsLoggedIn,
+    user: state.user,
   }));
 
   const getAndSetProducts = async () => {
-    const res = await getProducts();
+    const res = await getProducts(activePage, PRODUCTS_PER_PAGE_LIMIT);
     console.log(res);
     if (res?.code === 1) {
       setProducts(res?.data);
@@ -19,11 +24,17 @@ const Dashboard = () => {
   };
   React.useEffect(() => {
     setIsLoggedIn(true);
-    getAndSetProducts();
   }, []);
+
+  React.useEffect(() => {
+    getAndSetProducts();
+  }, [activePage]);
 
   return (
     <div className={styles.container}>
+      <div className={styles.title}>
+        <h1>Welcome, {user?.email}</h1>
+      </div>
       <div className={styles.productCards}>
         {products.map((product: any, index: number) => {
           return (
@@ -38,6 +49,12 @@ const Dashboard = () => {
           );
         })}
       </div>
+      <Pagination
+        page={activePage}
+        onChange={setPage}
+        total={activePage + 1} // Jugaad. Useless Jugaad.
+        className={styles.pagination}
+      />
     </div>
   );
 };
