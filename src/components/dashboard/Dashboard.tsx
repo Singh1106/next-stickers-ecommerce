@@ -52,7 +52,7 @@ const Dashboard = () => {
       <Pagination
         page={activePage}
         onChange={setPage}
-        total={activePage + 1} // Jugaad. Useless Jugaad.
+        total={products.length === 10 ? activePage + 1 : activePage} // Jugaad. Useless Jugaad.
         className={styles.pagination}
       />
     </div>
