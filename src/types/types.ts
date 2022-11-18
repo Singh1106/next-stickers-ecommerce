@@ -11,7 +11,6 @@ export interface JWT_Decoded {
 export interface User {
   name: string;
   email: string;
-  age: number;
 }
 
 export interface cartItem {

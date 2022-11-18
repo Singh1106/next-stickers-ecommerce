@@ -33,14 +33,10 @@ const userSchema = new Schema(
         }
       },
     },
-    age: {
-      type: Number,
-      default: 17,
-      // validate(value: number) {
-      //   if (value < 16) {
-      //     throw new Error("Age must be atleast 16");
-      //   }
-      // },
+    verifiedEmail: {
+      type: Boolean,
+      required: true,
+      default: false,
     },
     cart: [
       {

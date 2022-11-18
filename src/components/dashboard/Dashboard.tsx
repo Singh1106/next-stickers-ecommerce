@@ -17,14 +17,10 @@ const Dashboard = () => {
 
   const getAndSetProducts = async () => {
     const res = await getProducts(activePage, PRODUCTS_PER_PAGE_LIMIT);
-    console.log(res);
     if (res?.code === 1) {
       setProducts(res?.data);
     }
   };
-  React.useEffect(() => {
-    setIsLoggedIn(true);
-  }, []);
 
   React.useEffect(() => {
     getAndSetProducts();
