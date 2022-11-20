@@ -8,20 +8,28 @@ const handler = async (
   res: NextApiResponse<any>
 ) => {
   const { method } = req;
-  const { cart } = req.body;
+  const { orders: newOrders } = req.body;
   await connectDB();
 
   switch (method) {
     case "POST":
       try {
-        req.user.cart = cart;
+        const orders = req.user.orders ?? [];
+        orders.push(...newOrders);
+        req.user.orders = orders;
         await req.user.save();
+
         res.json({
-          msg: "Successfully updated cart",
+          msg: "Successfully updated orders",
           code: 1,
+          data: req.user.orders,
         });
       } catch (e) {
-        res.status(500).send(e);
+        res.status(500).send({
+          msg: "Something really went wrong",
+          code: -999,
+          error: e,
+        });
       }
       break;
     default:

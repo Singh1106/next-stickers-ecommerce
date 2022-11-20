@@ -59,6 +59,31 @@ const userSchema = new Schema(
         },
       },
     ],
+    orders: [
+      {
+        id: {
+          type: String,
+          required: true,
+        },
+        name: {
+          type: String,
+          requied: true,
+        },
+        quantity: {
+          type: Number,
+          required: true,
+          default: 0,
+        },
+        price: {
+          type: Number,
+          required: true,
+        },
+        orderedAt: {
+          type: Date,
+          required: true,
+        },
+      },
+    ],
     tokens: [
       {
         token: {

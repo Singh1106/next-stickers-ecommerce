@@ -10,8 +10,7 @@ const PRODUCTS_PER_PAGE_LIMIT = 10;
 const Dashboard = () => {
   const [products, setProducts] = React.useState([]);
   const [activePage, setPage] = React.useState(1);
-  const { setIsLoggedIn, user } = useAuthStore((state: any) => ({
-    setIsLoggedIn: state.setIsLoggedIn,
+  const { user } = useAuthStore((state: any) => ({
     user: state.user,
   }));
 

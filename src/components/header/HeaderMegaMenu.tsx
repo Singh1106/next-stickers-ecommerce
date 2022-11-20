@@ -78,6 +78,9 @@ export function HeaderMegaMenu() {
           <Group className={classes.hiddenMobile}>
             {isLoggedIn ? (
               <>
+                <Link href="/orders" className={classes.link}>
+                  Orders
+                </Link>
                 <Link href="/cart" className={classes.link}>
                   Cart
                 </Link>

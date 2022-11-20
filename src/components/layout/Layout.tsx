@@ -9,14 +9,14 @@ interface LayoutProps {
 
 export default function Layout({ children }: LayoutProps) {
   const router = useRouter();
-  const { setUser, setCart, isLoggedIn, setIsLoggedIn } = useAuthStore(
-    (state: any) => ({
+  const { setUser, setCart, isLoggedIn, setIsLoggedIn, setOrders } =
+    useAuthStore((state: any) => ({
       setUser: state.setUser,
       setCart: state.setCart,
       isLoggedIn: state.isLoggedIn,
       setIsLoggedIn: state.setIsLoggedIn,
-    })
-  );
+      setOrders: state.setOrders,
+    }));
   const getAndSetUser = async () => {
     const res = await getUser();
     if (res?.code === 1) {
@@ -26,13 +26,16 @@ export default function Layout({ children }: LayoutProps) {
       });
       setIsLoggedIn(true);
       setCart(res?.user?.cart);
+      setOrders(res?.user?.orders);
     } else {
-      router.push("/");
+      setIsLoggedIn(false);
     }
   };
   React.useEffect(() => {
-    if (!isLoggedIn) {
+    if (isLoggedIn) {
       getAndSetUser();
+    } else {
+      router.push("/");
     }
   }, [isLoggedIn]);
   return (

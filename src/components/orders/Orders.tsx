@@ -6,16 +6,9 @@ import {
   Group,
   Text,
   TextInput,
-  Button,
 } from "@mantine/core";
 import { IconSearch } from "@tabler/icons";
-import CartCounter from "../cartCounter/CartCounter";
-import styles from "./cart.module.css";
-import { addOrders } from "./actions";
-import { toast } from "react-toastify";
-import useAuthStore from "../../store";
-import { useRouter } from "next/navigation";
-import { updateCart } from "../productCard/actions";
+import styles from "./orders.module.css";
 
 const useStyles = createStyles((theme) => ({
   th: {
@@ -73,40 +66,12 @@ function filterData(data: RowData[], search: string) {
   return data.filter((item) => item.name.toLowerCase().includes(query));
 }
 
-function Cart({ data }: TableSortProps) {
+function Orders({ data }: TableSortProps) {
   const [search, setSearch] = useState("");
   const [filteredData, setFilteredData] = useState(data);
-  const { setCart, orders, setOrders } = useAuthStore((state: any) => ({
-    setCart: state.setCart,
-    orders: state.orders,
-    setOrders: state.setOrders,
-  }));
-  const router = useRouter();
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = event.currentTarget;
     setSearch(value);
-  };
-
-  const getTotal = () => {
-    let total = 0;
-    data.map((filteredDataItem) => {
-      total += filteredDataItem.quantity * filteredDataItem.price;
-    });
-    return total;
-  };
-  const goAheadHandler = async () => {
-    try {
-      const res = await addOrders(data);
-      if (res?.code === 1) {
-        toast("Order placed successfully");
-        await updateCart([]);
-        setCart([]);
-        setOrders(res?.data);
-        router.push("/orders");
-      }
-    } catch (error) {
-      toast.error("Something went wrong, please try again.");
-    }
   };
   useEffect(() => {
     setFilteredData(filterData(data, search));
@@ -114,11 +79,7 @@ function Cart({ data }: TableSortProps) {
   const rows = filteredData.map((row) => (
     <tr key={row.name}>
       <td>{row.name}</td>
-      <td>
-        <CartCounter id={row.id} name={row.name}>
-          {row.quantity}
-        </CartCounter>
-      </td>
+      <td>{row.quantity}</td>
       <td>
         {row.price} Rupees x {row.quantity} = {row.price * row.quantity} Rupees
       </td>
@@ -162,20 +123,8 @@ function Cart({ data }: TableSortProps) {
           )}
         </tbody>
       </Table>
-      <div className={styles.totalContainer}>
-        Total price: {getTotal()}
-        <Button
-          variant="subtle"
-          compact
-          className={styles.checkoutBtn}
-          disabled={getTotal() === 0}
-          onClick={goAheadHandler}
-        >
-          {getTotal() === 0 ? "Yo, do not go ahead." : "Yo, go ahead."}
-        </Button>
-      </div>
     </ScrollArea>
   );
 }
 
-export default Cart;
+export default Orders;

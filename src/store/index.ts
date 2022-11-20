@@ -13,6 +13,7 @@ const useAuthStore = create(
     isLoggedIn: false,
     userEntryType: UserEntryTypes.login,
     cart: [],
+    orders: [],
     setUser: (newUser: User) =>
       set((state: initialState) => ({
         ...state,
@@ -33,12 +34,18 @@ const useAuthStore = create(
         ...state,
         cart: newCart,
       })),
+    setOrders: (newOrders: cartItem[][]) =>
+      set((state: initialState) => ({
+        ...state,
+        orders: newOrders,
+      })),
     reset: () =>
       set(() => ({
         user: null,
         isLoggedIn: false,
         userEntryType: UserEntryTypes.login,
         cart: [],
+        orders: [],
       })),
   }))
 );

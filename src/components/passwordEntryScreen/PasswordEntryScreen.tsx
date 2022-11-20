@@ -36,7 +36,6 @@ export const PasswordEntryScreen = () => {
       });
       if (res?.data?.code === 1) {
         setIsLoggedIn(true);
-
         router.push("/dashboard");
       }
     }
