@@ -28,15 +28,9 @@ const Dashboard = () => {
       setProducts(res?.data);
     }
   };
-  const paginationOnChange = (page: number) => {
-    setActiveProductPage(page);
-    getAndSetProducts();
-  };
   React.useEffect(() => {
-    if (products.length === 0) {
-      getAndSetProducts();
-    }
-  }, []);
+    getAndSetProducts();
+  }, [activeProductPage]);
 
   return (
     <div className={styles.container}>
@@ -59,7 +53,7 @@ const Dashboard = () => {
       </div>
       <Pagination
         page={activeProductPage}
-        onChange={paginationOnChange}
+        onChange={setActiveProductPage}
         total={
           products.length === PRODUCTS_PER_PAGE_LIMIT
             ? activeProductPage + 1

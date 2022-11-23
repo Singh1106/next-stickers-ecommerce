@@ -63,7 +63,12 @@ function Th({ children }: ThProps) {
 
 function filterData(data: RowData[], search: string) {
   const query = search.toLowerCase().trim();
-  return data.filter((item) => item.name.toLowerCase().includes(query));
+  console.log(query);
+  const filteredData = data.filter((item) => {
+    console.log(item);
+    return item.name.toLowerCase().includes(query);
+  });
+  return filteredData;
 }
 
 function Orders({ data }: TableSortProps) {
@@ -75,9 +80,9 @@ function Orders({ data }: TableSortProps) {
   };
   useEffect(() => {
     setFilteredData(filterData(data, search));
-  }, [search, data.length]);
-  const rows = filteredData.map((row) => (
-    <tr key={row.name}>
+  }, [search]);
+  const rows = filteredData.map((row, index) => (
+    <tr key={index}>
       <td>{row.name}</td>
       <td>{row.quantity}</td>
       <td>
@@ -110,7 +115,7 @@ function Orders({ data }: TableSortProps) {
           </tr>
         </thead>
         <tbody>
-          {data.length > 0 ? (
+          {filteredData.length > 0 ? (
             rows
           ) : (
             <tr>

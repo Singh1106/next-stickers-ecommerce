@@ -1,4 +1,5 @@
 import dynamic from "next/dynamic";
+import Dashboard from "../../src/components/dashboard/Dashboard";
 import WPR from "../../src/components/withPrivateRoute/WPR";
 
 function DashboardPage() {
@@ -11,4 +12,4 @@ function DashboardPage() {
   return <Dashboard />;
 }
 
-export default WPR(DashboardPage);
+export default WPR(Dashboard);

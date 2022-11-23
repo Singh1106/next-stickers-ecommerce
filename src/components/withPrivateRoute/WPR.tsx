@@ -18,7 +18,6 @@ const WPR = (Component: any) => {
     const router = useRouter();
 
     const isLoggedInChecker = async () => {
-      console.log("123123");
       if (!isLoggedIn) {
         const res = await getUser();
         if (res?.code !== 1) {
