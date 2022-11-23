@@ -1,14 +1,11 @@
-import { useState, useEffect } from "react";
 import {
   createStyles,
   Table,
   ScrollArea,
   Group,
   Text,
-  TextInput,
   Button,
 } from "@mantine/core";
-import { IconSearch } from "@tabler/icons";
 import CartCounter from "../cartCounter/CartCounter";
 import styles from "./cart.module.css";
 import { addOrders } from "./actions";
@@ -68,24 +65,12 @@ function Th({ children }: ThProps) {
   );
 }
 
-function filterData(data: RowData[], search: string) {
-  const query = search.toLowerCase().trim();
-  return data.filter((item) => item.name.toLowerCase().includes(query));
-}
-
 function Cart({ data }: TableSortProps) {
-  const [search, setSearch] = useState("");
-  const [filteredData, setFilteredData] = useState(data);
-  const { setCart, orders, setOrders } = useAuthStore((state: any) => ({
+  const { setCart, setOrders } = useAuthStore((state: any) => ({
     setCart: state.setCart,
-    orders: state.orders,
     setOrders: state.setOrders,
   }));
   const router = useRouter();
-  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { value } = event.currentTarget;
-    setSearch(value);
-  };
 
   const getTotal = () => {
     let total = 0;
@@ -108,10 +93,7 @@ function Cart({ data }: TableSortProps) {
       toast.error("Something went wrong, please try again.");
     }
   };
-  useEffect(() => {
-    setFilteredData(filterData(data, search));
-  }, [search, data.length]);
-  const rows = filteredData.map((row) => (
+  const rows = data.map((row) => (
     <tr key={row.name}>
       <td>{row.name}</td>
       <td>
@@ -127,14 +109,6 @@ function Cart({ data }: TableSortProps) {
 
   return (
     <ScrollArea className={styles.cartContainer}>
-      <TextInput
-        placeholder="Search by name"
-        mb="md"
-        icon={<IconSearch size={14} stroke={1.5} />}
-        value={search}
-        onChange={handleSearchChange}
-        className={styles.searchBar}
-      />
       <Table
         horizontalSpacing="md"
         verticalSpacing="xs"

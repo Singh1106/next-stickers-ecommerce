@@ -8,22 +8,35 @@ import useAuthStore from "../../store";
 const PRODUCTS_PER_PAGE_LIMIT = 10;
 
 const Dashboard = () => {
-  const [products, setProducts] = React.useState([]);
-  const [activePage, setPage] = React.useState(1);
-  const { user } = useAuthStore((state: any) => ({
+  const {
+    products,
+    setProducts,
+    activeProductPage,
+    setActiveProductPage,
+    user,
+  } = useAuthStore((state: any) => ({
+    products: state.products,
+    setProducts: state.setProducts,
+    activeProductPage: state.activeProductPage,
+    setActiveProductPage: state.setActiveProductPage,
     user: state.user,
   }));
 
   const getAndSetProducts = async () => {
-    const res = await getProducts(activePage, PRODUCTS_PER_PAGE_LIMIT);
+    const res = await getProducts(activeProductPage, PRODUCTS_PER_PAGE_LIMIT);
     if (res?.code === 1) {
       setProducts(res?.data);
     }
   };
-
-  React.useEffect(() => {
+  const paginationOnChange = (page: number) => {
+    setActiveProductPage(page);
     getAndSetProducts();
-  }, [activePage]);
+  };
+  React.useEffect(() => {
+    if (products.length === 0) {
+      getAndSetProducts();
+    }
+  }, []);
 
   return (
     <div className={styles.container}>
@@ -45,12 +58,12 @@ const Dashboard = () => {
         })}
       </div>
       <Pagination
-        page={activePage}
-        onChange={setPage}
+        page={activeProductPage}
+        onChange={paginationOnChange}
         total={
           products.length === PRODUCTS_PER_PAGE_LIMIT
-            ? activePage + 1
-            : activePage
+            ? activeProductPage + 1
+            : activeProductPage
         } // Jugaad. Useless Jugaad.
         className={styles.pagination}
       />

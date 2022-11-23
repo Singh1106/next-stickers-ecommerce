@@ -35,7 +35,7 @@ export const PasswordEntryScreen = () => {
         error: "What?? An error? Please try again...",
       });
       if (res?.data?.code === 1) {
-        setIsLoggedIn(true);
+        // setIsLoggedIn(true);
         router.push("/dashboard");
       }
     }
@@ -52,7 +52,7 @@ export const PasswordEntryScreen = () => {
       });
       console.log(res);
       if (res?.data?.code === 1) {
-        setIsLoggedIn(true);
+        // setIsLoggedIn(true);
         router.push("/dashboard");
       }
     }

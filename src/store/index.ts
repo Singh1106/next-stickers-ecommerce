@@ -14,6 +14,8 @@ const useAuthStore = create(
     userEntryType: UserEntryTypes.login,
     cart: [],
     orders: [],
+    products: [],
+    activeProductPage: 1,
     setUser: (newUser: User) =>
       set((state: initialState) => ({
         ...state,
@@ -39,13 +41,26 @@ const useAuthStore = create(
         ...state,
         orders: newOrders,
       })),
+    setProducts: (newProducts: any) =>
+      set((state: initialState) => ({
+        ...state,
+        products: newProducts,
+      })),
+    setActiveProductPage: (newActivePage: number) =>
+      set((state: initialState) => ({
+        ...state,
+        activeProductPage: newActivePage,
+      })),
     reset: () =>
-      set(() => ({
+      set((state: initialState) => ({
+        ...state,
         user: null,
         isLoggedIn: false,
         userEntryType: UserEntryTypes.login,
         cart: [],
         orders: [],
+        products: [],
+        activeProductPage: 1,
       })),
   }))
 );
