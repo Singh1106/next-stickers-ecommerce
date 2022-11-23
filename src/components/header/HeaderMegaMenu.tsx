@@ -62,7 +62,6 @@ export function HeaderMegaMenu() {
             Info
           </Button>
         </Menu.Target>
-
         <Menu.Dropdown>
           <Menu.Item>
             <Link href="/info/AboutUs">About us</Link>

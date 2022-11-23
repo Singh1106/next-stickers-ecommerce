@@ -10,9 +10,10 @@ const EMAIL_regEx = /\S+@\S+\.\S+/;
 
 export const EmailEntryScreen = () => {
   const router = useRouter();
-  const { setUser, setUserEntryType } = useAuthStore((state: any) => ({
+  const { setUser, setUserEntryType, reset } = useAuthStore((state: any) => ({
     setUser: state.setUser,
     setUserEntryType: state.setUserEntryType,
+    reset: state.reset,
   }));
   const [formData, setFormData] = React.useState({
     email: "",
@@ -22,6 +23,9 @@ export const EmailEntryScreen = () => {
   const onChangeHandler = (e: any) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
+  React.useEffect(() => {
+    reset();
+  }, []);
 
   const onEnterEmailHandler = async () => {
     const res = await toast.promise(findUserByEmail(email), {
