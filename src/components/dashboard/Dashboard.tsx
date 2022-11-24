@@ -4,6 +4,7 @@ import { getProducts } from "./actions";
 import { Pagination } from "@mantine/core";
 import { ProductCard } from "../productCard/ProductCard";
 import useAuthStore from "../../store";
+import product from "../../models/product";
 
 const PRODUCTS_PER_PAGE_LIMIT = 10;
 
@@ -21,6 +22,7 @@ const Dashboard = () => {
     setActiveProductPage: state.setActiveProductPage,
     user: state.user,
   }));
+  const [i, setI] = React.useState(activeProductPage);
 
   const getAndSetProducts = async () => {
     const res = await getProducts(activeProductPage, PRODUCTS_PER_PAGE_LIMIT);
@@ -29,7 +31,10 @@ const Dashboard = () => {
     }
   };
   React.useEffect(() => {
-    getAndSetProducts();
+    if (products.length === 0 || i !== activeProductPage) {
+      getAndSetProducts();
+      setI(activeProductPage);
+    }
   }, [activeProductPage]);
 
   return (
