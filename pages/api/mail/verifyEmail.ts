@@ -16,6 +16,7 @@ const handler = async (
   switch (method) {
     case "GET":
       try {
+        console.log(req.rawHeaders);
         const type = "verificationEmail";
         const user = req.user;
         const date = new Date();
@@ -24,7 +25,6 @@ const handler = async (
           code: Math.floor(Math.random() * 1000000000),
           expiry: date,
         };
-        await user.save();
         const mailOptions = getMailOptions(type, req.user.email, {
           verificationCode: user.tempEmailVerifyToken.code,
           domain: req.rawHeaders[1],
@@ -40,6 +40,7 @@ const handler = async (
             });
           }
         });
+        await user.save();
         return res.json({
           code: 1,
         });
