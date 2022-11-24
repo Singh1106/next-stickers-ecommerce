@@ -1,4 +1,5 @@
 import Cart from "../../src/components/cart/Cart";
+import WPR from "../../src/components/withPrivateRoute/WPR";
 import useAuthStore from "../../src/store";
 
 const CartPage = () => {
@@ -6,4 +7,4 @@ const CartPage = () => {
   return <Cart data={cart} />;
 };
 
-export default CartPage;
+export default WPR(CartPage);

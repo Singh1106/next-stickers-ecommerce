@@ -5,6 +5,7 @@ import { login, signup } from "./actions";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import useAuthStore, { UserEntryTypes } from "../../store";
+import { callMailApi } from "../../utils/commonActions";
 
 export const PasswordEntryScreen = () => {
   const router = useRouter();
@@ -35,7 +36,6 @@ export const PasswordEntryScreen = () => {
         error: "What?? An error? Please try again...",
       });
       if (res?.data?.code === 1) {
-        // setIsLoggedIn(true);
         router.push("/dashboard");
       }
     }
@@ -50,9 +50,8 @@ export const PasswordEntryScreen = () => {
         },
         error: "What?? An error? Please try again...",
       });
-      console.log(res);
       if (res?.data?.code === 1) {
-        // setIsLoggedIn(true);
+        await callMailApi("signup", user?.email);
         router.push("/dashboard");
       }
     }

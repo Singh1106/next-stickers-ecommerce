@@ -11,6 +11,7 @@ export interface JWT_Decoded {
 export interface User {
   name: string;
   email: string;
+  verifiedEmail?: boolean;
 }
 
 export interface cartItem {

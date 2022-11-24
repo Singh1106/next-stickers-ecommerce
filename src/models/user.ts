@@ -1,5 +1,4 @@
 import mongoose from "mongoose";
-import { isNamedTupleMember } from "typescript";
 import validator from "validator";
 
 const Schema = mongoose.Schema;
@@ -38,6 +37,11 @@ const userSchema = new Schema(
       required: true,
       default: false,
     },
+    isAdmin: {
+      type: Boolean,
+      required: true,
+      default: false,
+    },
     cart: [
       {
         id: {
@@ -59,6 +63,14 @@ const userSchema = new Schema(
         },
       },
     ],
+    tempEmailVerifyToken: {
+      code: {
+        type: String,
+      },
+      expiry: {
+        type: Date,
+      },
+    },
     orders: [
       {
         id: {
