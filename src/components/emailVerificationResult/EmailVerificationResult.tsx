@@ -21,7 +21,7 @@ const EmailVerificationResult = (props: any) => {
   return (
     <div>
       Wuhooooo, You are verified. Lets go back to{" "}
-      <Link href="/dashboard">dashboard(It's a link)</Link>
+      <Link href="/dashboard">dashboard(It is a link)</Link>
     </div>
   );
 };
