@@ -16,7 +16,6 @@ const handler = async (
   switch (method) {
     case "GET":
       try {
-        console.log(req.rawHeaders);
         const type = "verificationEmail";
         const user = req.user;
         const date = new Date();
@@ -27,7 +26,7 @@ const handler = async (
         };
         const mailOptions = getMailOptions(type, req.user.email, {
           verificationCode: user.tempEmailVerifyToken.code,
-          domain: req.rawHeaders[1],
+          domain: req.headers.host,
           date,
         });
         transporter.sendMail(mailOptions, function (err, info) {
