@@ -29,3 +29,6 @@
     align-items: center;
     justify-content: space-between;
 }
+.confirmModalButton {
+    padding-top: 50px;
+}

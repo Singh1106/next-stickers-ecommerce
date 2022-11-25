@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, TextInput } from "@mantine/core";
+import { Button, Group, Modal, TextInput } from "@mantine/core";
 import styles from "./account.module.css";
 import { updateProfile } from "./actions";
 import useAuthStore from "../../store";
@@ -11,6 +11,7 @@ const Account = () => {
     user: state.user,
     setUser: state.setUser,
   }));
+  const [modalOpen, setModalOpen] = React.useState(false);
   const [emailDisabled, setIsEmailDisabled] = React.useState(true);
   const [formData, setFormData] = React.useState({
     name: user?.name,
@@ -27,7 +28,9 @@ const Account = () => {
         ...user,
         name,
         email,
+        verifiedEmail: false,
       });
+      setIsEmailDisabled(true);
       toast("User profile successfully updated");
     } else {
       toast.error("Something went wrong");
@@ -66,7 +69,11 @@ const Account = () => {
           </Button>
           <Button
             onClick={() => {
-              setIsEmailDisabled(!emailDisabled);
+              if (emailDisabled) {
+                setModalOpen(true);
+              } else {
+                setIsEmailDisabled(!emailDisabled);
+              }
             }}
           >
             {emailDisabled
@@ -75,6 +82,27 @@ const Account = () => {
           </Button>
         </div>
       </div>
+      <Modal
+        opened={modalOpen}
+        onClose={() => {
+          setModalOpen(false);
+        }}
+        size="auto"
+        title="CHANGING EMAIL? AAAAAAAAAAAA"
+      >
+        By changing email, you will be redirected to verifying email stage, as
+        this new email is unverified. I hope you understand.
+        <Group className={styles.confirmModalButton}>
+          <Button
+            onClick={() => {
+              setModalOpen(false);
+              setIsEmailDisabled(!emailDisabled);
+            }}
+          >
+            Confirm
+          </Button>
+        </Group>
+      </Modal>
     </>
   );
 };
