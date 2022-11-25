@@ -36,12 +36,14 @@ const handler = async (
             return res.json({
               code: 1,
               info,
+              date,
             });
           }
         });
         await user.save();
         return res.json({
           code: 1,
+          date,
         });
       } catch (err: any) {
         console.log(err);

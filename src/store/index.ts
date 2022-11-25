@@ -16,6 +16,8 @@ const useAuthStore = create(
     orders: [],
     products: [],
     activeProductPage: 1,
+    verificationMailSent: false,
+    expiryVerificationMail: new Date(),
     setUser: (newUser: User) =>
       set((state: initialState) => ({
         ...state,
@@ -50,6 +52,16 @@ const useAuthStore = create(
       set((state: initialState) => ({
         ...state,
         activeProductPage: newActivePage,
+      })),
+    setVerificationMailSent: (newVerificationMailSent: boolean) =>
+      set((state: initialState) => ({
+        ...state,
+        verificationMailSent: newVerificationMailSent,
+      })),
+    setExpiryVerificationMail: (setExpiryVerificationMail: Date) =>
+      set((state: initialState) => ({
+        ...state,
+        expiryVerificationMail: setExpiryVerificationMail,
       })),
     reset: () =>
       set((state: initialState) => ({

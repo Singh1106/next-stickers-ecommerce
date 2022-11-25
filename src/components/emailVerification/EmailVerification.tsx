@@ -4,16 +4,26 @@ import useAuthStore from "../../store";
 import { sendVerificationEmail } from "./actions";
 
 const EmailVerification = () => {
-  const { user } = useAuthStore((state: any) => {
+  const {
+    user,
+    verificationMailSent,
+    setVerificationMailSent,
+    expiryVerificationMail,
+    setExpiryVerificationMail,
+  } = useAuthStore((state: any) => {
     return {
       user: state.user,
+      verificationMailSent: state.verificationMailSent,
+      setVerificationMailSent: state.setVerificationMailSent,
+      expiryVerificationMail: state.expiryVerificationMail,
+      setExpiryVerificationMail: state.setExpiryVerificationMail,
     };
   });
-  const [mailSent, setMailSent] = React.useState(false);
   const verifyItHandler = async () => {
     const res = await sendVerificationEmail();
     if (res?.code === 1) {
-      setMailSent(true);
+      setVerificationMailSent(true);
+      setExpiryVerificationMail(res?.date);
     }
   };
   return (
@@ -22,9 +32,13 @@ const EmailVerification = () => {
         Oh no, seems like {user?.email} is not verified. Wanna verify it? You
         better, you cant do shit without verifying it.
       </div>
-      {mailSent && <div>An email has been sent, You can verify till </div>}
+      {verificationMailSent && (
+        <div>
+          An email has been sent, You can verify till {expiryVerificationMail}
+        </div>
+      )}
       <Button onClick={verifyItHandler}>
-        {mailSent && `Re`}send verification email.
+        {verificationMailSent && `Re`}send verification email.
       </Button>
     </>
   );
