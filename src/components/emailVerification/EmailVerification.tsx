@@ -1,9 +1,11 @@
 import { Button } from "@mantine/core";
+import { useRouter } from "next/navigation";
 import React from "react";
 import useAuthStore from "../../store";
 import { sendVerificationEmail } from "./actions";
 
 const EmailVerification = () => {
+  const router = useRouter();
   const {
     user,
     verificationMailSent,
@@ -19,6 +21,11 @@ const EmailVerification = () => {
       setExpiryVerificationMail: state.setExpiryVerificationMail,
     };
   });
+  React.useEffect(() => {
+    if (user?.verifiedEmail) {
+      router.push("/dashboard");
+    }
+  }, [user?.verifiedEmail]);
   const verifyItHandler = async () => {
     const res = await sendVerificationEmail();
     if (res?.code === 1) {

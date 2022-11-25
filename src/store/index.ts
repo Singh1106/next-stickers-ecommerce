@@ -7,7 +7,7 @@ export enum UserEntryTypes {
   register = 2,
 }
 
-const useAuthStore = create(
+const useAuthStore: any = create(
   devtools((set) => ({
     user: null,
     isLoggedIn: false,

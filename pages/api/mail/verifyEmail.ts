@@ -29,21 +29,17 @@ const handler = async (
           domain: req.headers.host,
           date,
         });
-        transporter.sendMail(mailOptions, function (err, info) {
+        transporter.sendMail(mailOptions, async (err, info) => {
+          console.log(err, info);
           if (err) {
-            return res.json(err);
-          } else {
-            return res.json({
-              code: 1,
-              info,
-              date,
-            });
+            res.json({ code: 0, err });
           }
-        });
-        await user.save();
-        return res.json({
-          code: 1,
-          date,
+          res.json({
+            code: 1,
+            info,
+            date,
+          });
+          await user.save();
         });
       } catch (err: any) {
         console.log(err);
