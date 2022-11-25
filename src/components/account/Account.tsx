@@ -44,6 +44,7 @@ const Account = () => {
           label="The New Name"
           placeholder="New Name entry."
           name="name"
+          value={name}
           onChange={onChangeHandler}
         />
         <TextInput
@@ -51,6 +52,7 @@ const Account = () => {
           placeholder="New Email entry."
           name="email"
           onChange={onChangeHandler}
+          value={email}
           disabled={emailDisabled}
         />
         <div className={styles.buttons}>
