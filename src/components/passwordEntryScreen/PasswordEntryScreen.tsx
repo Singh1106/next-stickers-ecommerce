@@ -5,6 +5,7 @@ import { login, signup } from "./actions";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import useAuthStore, { UserEntryTypes } from "../../store";
+import { callMailApi } from "../../utils/commonActions";
 
 export const PasswordEntryScreen = () => {
   const router = useRouter();
@@ -35,8 +36,6 @@ export const PasswordEntryScreen = () => {
         error: "What?? An error? Please try again...",
       });
       if (res?.data?.code === 1) {
-        setIsLoggedIn(true);
-
         router.push("/dashboard");
       }
     }
@@ -51,40 +50,37 @@ export const PasswordEntryScreen = () => {
         },
         error: "What?? An error? Please try again...",
       });
-      console.log(res);
       if (res?.data?.code === 1) {
-        setIsLoggedIn(true);
+        await callMailApi("signup", user?.email);
         router.push("/dashboard");
       }
     }
   };
   return (
-    <>
-      <div className={styles.container}>
-        <div className={styles.title}>
-          <h2>Next-Commerce-Store</h2>
-          <h3>
-            {userEntryType === 1
-              ? `Welcome back, ${user?.email}`
-              : `Ooooh, new user. Welcome.`}
-          </h3>
-          <h4>Please enter password to continue.</h4>
-        </div>
-        <TextInput
-          label="The Password"
-          placeholder="Password entry."
-          name="password"
-          type="password"
-          onChange={onChangeHandler}
-        />
-        <Button
-          className={styles.goaheadbtn}
-          color="pink"
-          onClick={onContinueHandler}
-        >
-          Continue.
-        </Button>
+    <div className={styles.container}>
+      <div className={styles.title}>
+        <h2>Next-Commerce-Store</h2>
+        <h3>
+          {userEntryType === 1
+            ? `Welcome back, ${user?.email}`
+            : `Ooooh, new user. Welcome.`}
+        </h3>
+        <h4>Please enter password to continue.</h4>
       </div>
-    </>
+      <TextInput
+        label="The Password"
+        placeholder="Password entry."
+        name="password"
+        type="password"
+        onChange={onChangeHandler}
+      />
+      <Button
+        className={styles.goaheadbtn}
+        color="lightblue"
+        onClick={onContinueHandler}
+      >
+        Continue.
+      </Button>
+    </div>
   );
 };

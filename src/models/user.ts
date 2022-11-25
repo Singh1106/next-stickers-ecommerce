@@ -32,15 +32,70 @@ const userSchema = new Schema(
         }
       },
     },
-    age: {
-      type: Number,
-      default: 0,
-      // validate(value: number) {
-      //   if (value < 16) {
-      //     throw new Error("Age must be atleast 16");
-      //   }
-      // },
+    verifiedEmail: {
+      type: Boolean,
+      required: true,
+      default: false,
     },
+    isAdmin: {
+      type: Boolean,
+      required: true,
+      default: false,
+    },
+    cart: [
+      {
+        id: {
+          type: String,
+          required: true,
+        },
+        name: {
+          type: String,
+          requied: true,
+        },
+        quantity: {
+          type: Number,
+          required: true,
+          default: 0,
+        },
+        price: {
+          type: Number,
+          required: true,
+        },
+      },
+    ],
+    tempEmailVerifyToken: {
+      code: {
+        type: String,
+      },
+      expiry: {
+        type: Date,
+      },
+    },
+    orders: [
+      {
+        id: {
+          type: String,
+          required: true,
+        },
+        name: {
+          type: String,
+          requied: true,
+        },
+        quantity: {
+          type: Number,
+          required: true,
+          default: 0,
+        },
+        price: {
+          type: Number,
+          required: true,
+        },
+        orderedAt: {
+          type: Date,
+          required: true,
+        },
+      },
+    ],
     tokens: [
       {
         token: {

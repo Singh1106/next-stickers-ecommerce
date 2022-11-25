@@ -1,0 +1,17 @@
+.cartContainer {
+    margin: 0 20px 0 20px;
+    max-width: 70%;
+    margin: auto
+}
+.totalContainer {
+    margin-top: 20px;
+}
+.checkoutBtn {
+    margin-left: 10px
+}
+.searchBar {
+    width: 30%; 
+}
+.mainTable tbody tr td {
+    padding: 10px 16px 10px 0;
+}

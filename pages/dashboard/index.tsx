@@ -1,6 +1,8 @@
 import dynamic from "next/dynamic";
+import Dashboard from "../../src/components/dashboard/Dashboard";
+import WPR from "../../src/components/withPrivateRoute/WPR";
 
-export default function DashboardPage() {
+function DashboardPage() {
   const Dashboard = dynamic(
     () => import("../../src/components/dashboard/Dashboard"),
     {
@@ -9,3 +11,5 @@ export default function DashboardPage() {
   );
   return <Dashboard />;
 }
+
+export default WPR(Dashboard);

@@ -1,59 +1,71 @@
 import React from "react";
 import styles from "./dashboard.module.css";
-import { getUser } from "./actions";
-import { useRouter } from "next/navigation";
-import useAuthStore from "../../store/index";
-import { getProducts } from "../productCard/actions";
+import { getProducts } from "./actions";
+import { Pagination } from "@mantine/core";
 import { ProductCard } from "../productCard/ProductCard";
+import useAuthStore from "../../store";
+import product from "../../models/product";
+
+const PRODUCTS_PER_PAGE_LIMIT = 10;
 
 const Dashboard = () => {
-  const router = useRouter();
-  const { setUser } = useAuthStore((state: any) => ({
-    cart: state.cart,
-    setUser: state.setUser,
-    setCart: state.setCart,
+  const {
+    products,
+    setProducts,
+    activeProductPage,
+    setActiveProductPage,
+    user,
+  } = useAuthStore((state: any) => ({
+    products: state.products,
+    setProducts: state.setProducts,
+    activeProductPage: state.activeProductPage,
+    setActiveProductPage: state.setActiveProductPage,
+    user: state.user,
   }));
-  const [products, setProducts] = React.useState([]);
-  const getAndSetUser = async () => {
-    const res = await getUser();
-    if (res.code === 1) {
-      setUser({
-        name: res?.user.name,
-        email: res?.user.email,
-        age: res?.user.age,
-      });
-    } else {
-      router.push("/");
-    }
-  };
+  const [i, setI] = React.useState(activeProductPage);
 
   const getAndSetProducts = async () => {
-    const res = await getProducts();
-    console.log(res);
+    const res = await getProducts(activeProductPage, PRODUCTS_PER_PAGE_LIMIT);
     if (res?.code === 1) {
       setProducts(res?.data);
     }
   };
   React.useEffect(() => {
-    getAndSetUser();
-  }, []);
-  React.useEffect(() => {
-    getAndSetProducts();
-  }, []);
+    if (products.length === 0 || i !== activeProductPage) {
+      getAndSetProducts();
+      setI(activeProductPage);
+    }
+  }, [activeProductPage]);
+
   return (
     <div className={styles.container}>
-      <div className={styles.productCard}>
+      <div className={styles.title}>
+        <h1>Welcome, {user?.email}</h1>
+      </div>
+      <div className={styles.productCards}>
         {products.map((product: any, index: number) => {
           return (
             <ProductCard
+              id={product._id}
               name={product.name}
               desc={product.desc}
               imageURL={product.image}
+              price={product.price}
               key={index}
             />
           );
         })}
       </div>
+      <Pagination
+        page={activeProductPage}
+        onChange={setActiveProductPage}
+        total={
+          products.length === PRODUCTS_PER_PAGE_LIMIT
+            ? activeProductPage + 1
+            : activeProductPage
+        } // Jugaad. Useless Jugaad.
+        className={styles.pagination}
+      />
     </div>
   );
 };

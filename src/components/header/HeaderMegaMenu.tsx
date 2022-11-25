@@ -1,7 +1,7 @@
-import { createStyles, Header, Group, Box, Button } from "@mantine/core";
+import { createStyles, Header, Group, Box, Button, Menu } from "@mantine/core";
 import Link from "next/link";
 import useAuthStore from "../../store";
-import { logout } from "../dashboard/actions";
+import { logout } from "./actions";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 
@@ -41,19 +41,51 @@ const useStyles = createStyles((theme) => ({
 
 export function HeaderMegaMenu() {
   const router = useRouter();
-  const { setUser, isLoggedIn, setIsLoggedIn } = useAuthStore((state: any) => ({
-    setUser: state.setUser,
+  const { isLoggedIn, reset } = useAuthStore((state: any) => ({
     isLoggedIn: state.isLoggedIn,
-    setIsLoggedIn: state.setIsLoggedIn,
+    reset: state.reset,
   }));
   const { classes } = useStyles();
 
-  const logoutHandler = () => {
-    logout();
-    setUser(null);
-    setIsLoggedIn(false);
+  const logoutHandler = async () => {
+    reset(); // why no work
+    await logout();
     toast("Logged out successfully.!!");
     router.push("/");
+  };
+
+  const infoRenderer = () => {
+    return (
+      <Menu shadow="md" width={200}>
+        <Menu.Target>
+          <Button variant="subtle" color="dark">
+            Info
+          </Button>
+        </Menu.Target>
+        <Menu.Dropdown>
+          <Menu.Item>
+            <Link href="/info/AboutUs">About us</Link>
+          </Menu.Item>
+          <Menu.Item>
+            <Link href="/info/CancellationAndRefund">
+              Cancellation and Refund
+            </Link>
+          </Menu.Item>
+          <Menu.Item>
+            <Link href="/info/ContactUs">Contact Us</Link>
+          </Menu.Item>
+          <Menu.Item>
+            <Link href="/info/PrivacyPolicy">Privacy Policy</Link>
+          </Menu.Item>
+          <Menu.Item>
+            <Link href="/info/ShippingAndDelivery">Shipping and Delivery</Link>
+          </Menu.Item>
+          <Menu.Item>
+            <Link href="/info/TermsAndConditions">Terms and Conditions</Link>
+          </Menu.Item>
+        </Menu.Dropdown>
+      </Menu>
+    );
   };
 
   return (
@@ -75,14 +107,32 @@ export function HeaderMegaMenu() {
               <Link href="/settings" className={classes.link}>
                 Settings
               </Link>
+              {infoRenderer()}
             </Group>
           )}
-          <Group className={classes.hiddenMobile}>
+          <Group
+            sx={{ height: "100%" }}
+            spacing={0}
+            className={classes.hiddenMobile}
+          >
             {isLoggedIn ? (
-              <Button onClick={logoutHandler}>Logout</Button>
+              <>
+                <Link href="/orders" className={classes.link}>
+                  Orders
+                </Link>
+                <Link href="/cart" className={classes.link}>
+                  Cart
+                </Link>
+                <Button onClick={logoutHandler} variant="subtle" color="dark">
+                  Logout
+                </Button>
+              </>
             ) : (
               <>
-                <Link href="/">Continue Screen</Link>
+                <Link className={classes.link} href="/">
+                  Continue Screen
+                </Link>
+                {infoRenderer()}
               </>
             )}
           </Group>
