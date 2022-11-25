@@ -73,6 +73,7 @@ const useAuthStore = create(
         orders: [],
         products: [],
         activeProductPage: 1,
+        verificationMailSent: false,
       })),
   }))
 );
