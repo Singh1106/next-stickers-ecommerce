@@ -42,6 +42,12 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<any>) => {
         });
 
         res.setHeader("Set-Cookie", serialised);
+        if (user.isAdmin) {
+          return res.json({
+            msg: "Admin Logged in successfully",
+            code: 2,
+          });
+        }
         res.json({
           msg: "Logged in successfully",
           code: 1,

@@ -11,6 +11,13 @@ const handler = async (
   switch (method) {
     case "GET":
       try {
+        if (req.user.isAdmin) {
+          return res.json({
+            msg: "Successfully got user",
+            code: 2,
+            user: req.user,
+          });
+        }
         res.json({
           msg: "Successfully got user",
           code: 1,

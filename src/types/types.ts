@@ -23,6 +23,6 @@ export interface cartItem {
 export interface initialState {
   user: User;
   userEntryType: number;
-  isLoggedIn: boolean;
+  isUserLoggedIn: boolean;
   cart: cartItem[];
 }

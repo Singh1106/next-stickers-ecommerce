@@ -9,11 +9,13 @@ import { callMailApi } from "../../utils/commonActions";
 
 export const PasswordEntryScreen = () => {
   const router = useRouter();
-  const { user, userEntryType, setIsLoggedIn } = useAuthStore((state: any) => ({
-    user: state.user,
-    userEntryType: state.userEntryType,
-    setIsLoggedIn: state.setIsLoggedIn,
-  }));
+  const { user, userEntryType, setIsUserLoggedIn } = useAuthStore(
+    (state: any) => ({
+      user: state.user,
+      userEntryType: state.userEntryType,
+      setIsUserLoggedIn: state.setIsUserLoggedIn,
+    })
+  );
   const [formData, setFormData] = React.useState({
     password: "",
   });
@@ -37,6 +39,9 @@ export const PasswordEntryScreen = () => {
       });
       if (res?.data?.code === 1) {
         router.push("/dashboard");
+      }
+      if (res?.data?.code === 2) {
+        router.push("admin-app/dashboard");
       }
     }
     if (userEntryType === UserEntryTypes.register) {
