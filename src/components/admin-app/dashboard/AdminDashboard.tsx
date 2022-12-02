@@ -22,8 +22,10 @@ const AdminDashboard = () => {
   };
   return (
     <div className={styles.mainAdminDashboard}>
-      <AdminNavbar setTab={setTab} />
-      <div>{renderTab()}</div>
+      <div>
+        <AdminNavbar setTab={setTab} />
+        <div>{renderTab()}</div>
+      </div>
     </div>
   );
 };
