@@ -90,6 +90,11 @@ const userSchema = new Schema(
           type: Number,
           required: true,
         },
+        status: {
+          type: String,
+          requied: true,
+          default: "Accepted",
+        },
         orderedAt: {
           type: Date,
           required: true,

@@ -6,6 +6,7 @@ import {
   Group,
   Text,
   TextInput,
+  Badge,
 } from "@mantine/core";
 import { IconSearch } from "@tabler/icons";
 import styles from "./orders.module.css";
@@ -38,6 +39,7 @@ interface RowData {
   quantity: number;
   price: number;
   id: string;
+  status?: string;
 }
 
 interface TableSortProps {
@@ -83,7 +85,16 @@ function Orders({ data }: TableSortProps) {
   }, [search]);
   const rows = filteredData.map((row, index) => (
     <tr key={index}>
-      <td>{row.name}</td>
+      <td>
+        <div className={styles.name}>
+          {row.name}
+          <div className={styles.badge}>
+            <Badge variant="gradient" gradient={{ from: "indigo", to: "cyan" }}>
+              {row?.status ?? "Unstatused"}
+            </Badge>
+          </div>
+        </div>
+      </td>
       <td>{row.quantity}</td>
       <td>
         {row.price} Rupees x {row.quantity} = {row.price * row.quantity} Rupees
