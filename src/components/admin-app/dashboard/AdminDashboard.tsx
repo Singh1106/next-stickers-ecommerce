@@ -23,6 +23,8 @@ const AdminDashboard = () => {
   return (
     <div className={styles.mainAdminDashboard}>
       <div>
+        <h1>Welcome to Admin Dashboard!</h1>
+
         <AdminNavbar setTab={setTab} />
         <div>{renderTab()}</div>
       </div>
