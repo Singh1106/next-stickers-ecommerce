@@ -2,18 +2,24 @@ import { ScrollArea, Table } from "@mantine/core";
 import React from "react";
 import { UserRow } from "../components/userRow/UserRow";
 import { getUnFulfilledOrdersUsers } from "./actions";
-
+import {
+  useQuery,
+  useMutation,
+  useQueryClient,
+  QueryClient,
+  QueryClientProvider,
+} from "react-query";
 const UnfulfilledOrders = () => {
-  const [users, setUsers] = React.useState([]);
-  const getOrders = async () => {
-    const res = await getUnFulfilledOrdersUsers();
-    if (res?.code === 1) {
-      setUsers(res?.users);
-    }
-  };
-  React.useEffect(() => {
-    getOrders();
-  }, []);
+  const { data, isLoading, isError } = useQuery(
+    "getUnFulfilledOrdersUsers",
+    getUnFulfilledOrdersUsers
+  );
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+  if (isError) {
+    return <div>Something went wrong, please try logging in again.</div>;
+  }
   return (
     <div>
       <ScrollArea>
@@ -26,7 +32,7 @@ const UnfulfilledOrders = () => {
             </tr>
           </thead>
           <tbody>
-            {users.map((user) => {
+            {data.users.map((user: any) => {
               return <UserRow item={user} />;
             })}
           </tbody>

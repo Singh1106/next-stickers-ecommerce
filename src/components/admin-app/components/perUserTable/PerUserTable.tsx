@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   createStyles,
   Table,
@@ -7,6 +7,7 @@ import {
   Group,
   Text,
   Badge,
+  Button,
 } from "@mantine/core";
 
 const useStyles = createStyles((theme) => ({
@@ -24,32 +25,56 @@ interface TableSelectionProps {
     quantity: number;
     status: string;
     orderedAt: string;
-    _id: string;
+    id: string;
   }[];
+  markThemAsShipped: () => void;
+  markThemAsAccepted: () => void;
+  markThemAsFulfilled: () => void;
+  setOrdersToUpdate: React.Dispatch<React.SetStateAction<string[]>>;
 }
 
-export function PerUserTable({ data }: TableSelectionProps) {
+export function PerUserTable({
+  data,
+  markThemAsShipped,
+  markThemAsAccepted,
+  markThemAsFulfilled,
+  setOrdersToUpdate,
+}: TableSelectionProps) {
   const { classes, cx } = useStyles();
   const [selection, setSelection] = useState([""]);
-  const toggleRow = (_id: string) =>
+
+  const toggleRow = (id: string) =>
     setSelection((current) =>
-      current.includes(_id)
-        ? current.filter((item) => item !== _id)
-        : [...current, _id]
+      current.includes(id)
+        ? current.filter((item) => item !== id)
+        : [...current, id]
     );
   const toggleAll = () =>
     setSelection((current) =>
-      current.length === data.length ? [] : data.map((item) => item._id)
+      current.length === data.length ? [] : data.map((item) => item.id)
     );
+  useEffect(() => {
+    console.log(selection);
+    setOrdersToUpdate(selection);
+  }, [selection]);
 
   const rows = data.map((item) => {
-    const selected = selection.includes(item._id);
+    const badgeVariant = (() => {
+      if (item.status === "Accepted") {
+        return "dot";
+      }
+      if (item.status === "Shipped") {
+        return "filled";
+      }
+      return "filled";
+    })();
+    const selected = selection.includes(item.id);
     return (
-      <tr key={item._id} className={cx({ [classes.rowSelected]: selected })}>
+      <tr key={item.id} className={cx({ [classes.rowSelected]: selected })}>
         <td>
           <Checkbox
-            checked={selection.includes(item._id)}
-            onChange={() => toggleRow(item._id)}
+            checked={selection.includes(item.id)}
+            onChange={() => toggleRow(item.id)}
             transitionDuration={0}
           />
         </td>
@@ -58,7 +83,7 @@ export function PerUserTable({ data }: TableSelectionProps) {
             <Text size="sm" weight={500}>
               {item.name}{" "}
               <div>
-                <Badge variant="filled">{item.status}</Badge>
+                <Badge variant={badgeVariant}>{item.status}</Badge>
               </div>
             </Text>
           </Group>
@@ -71,6 +96,30 @@ export function PerUserTable({ data }: TableSelectionProps) {
 
   return (
     <ScrollArea>
+      <Button.Group>
+        <Button
+          disabled={!selection.length}
+          onClick={markThemAsAccepted}
+          variant="subtle"
+        >
+          Mark em as Accepted
+        </Button>
+        <Button
+          disabled={!selection.length}
+          onClick={markThemAsShipped}
+          variant="subtle"
+        >
+          Mark em as Shipped
+        </Button>
+        <Button
+          disabled={!selection.length}
+          onClick={markThemAsFulfilled}
+          variant="subtle"
+        >
+          Mark em as Fulfilled
+        </Button>
+      </Button.Group>
+
       <Table sx={{ minWidth: 800 }} verticalSpacing="sm">
         <thead>
           <tr>

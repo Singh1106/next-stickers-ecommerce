@@ -5,6 +5,8 @@ import FulfilledOrders from "../fulfilledOrders/FulfilledOrders";
 import Messages from "../messages/Messages";
 import UnfulfilledOrders from "../unfulfilledOrders/UnfulfilledOrders";
 import styles from "./adminDashboard.module.css";
+import { QueryClient, QueryClientProvider } from "react-query";
+const queryClient = new QueryClient();
 
 const AdminDashboard = () => {
   const [tab, setTab] = React.useState<number | null>(null);
@@ -21,14 +23,16 @@ const AdminDashboard = () => {
     }
   };
   return (
-    <div className={styles.mainAdminDashboard}>
-      <div>
-        <h1>Welcome to Admin Dashboard!</h1>
+    <QueryClientProvider client={queryClient}>
+      <div className={styles.mainAdminDashboard}>
+        <div>
+          <h1>Welcome to Admin Dashboard!</h1>
 
-        <AdminNavbar setTab={setTab} />
-        <div>{renderTab()}</div>
+          <AdminNavbar setTab={setTab} />
+          <div>{renderTab()}</div>
+        </div>
       </div>
-    </div>
+    </QueryClientProvider>
   );
 };
 
