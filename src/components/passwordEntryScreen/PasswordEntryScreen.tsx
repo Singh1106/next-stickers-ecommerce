@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, TextInput } from "@mantine/core";
+import { Button, PasswordInput } from "@mantine/core";
 import styles from "./passwordentryscreen.module.css";
 import { login, signup } from "./actions";
 import { useRouter } from "next/navigation";
@@ -61,6 +61,11 @@ export const PasswordEntryScreen = () => {
       }
     }
   };
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      onContinueHandler();
+    }
+  };
   return (
     <div className={styles.container}>
       <div className={styles.title}>
@@ -72,12 +77,13 @@ export const PasswordEntryScreen = () => {
         </h3>
         <h4>Please enter password to continue.</h4>
       </div>
-      <TextInput
+      <PasswordInput
         label="The Password"
         placeholder="Password entry."
         name="password"
         type="password"
         onChange={onChangeHandler}
+        onKeyDown={handleKeyDown}
       />
       <Button
         className={styles.goaheadbtn}

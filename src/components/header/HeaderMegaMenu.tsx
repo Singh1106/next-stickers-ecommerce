@@ -138,6 +138,9 @@ export function HeaderMegaMenu() {
               <Link href="/settings" className={classes.link}>
                 Settings
               </Link>
+              <Link href="/talktoadmin" className={classes.link}>
+                Talk to Admin
+              </Link>
               {infoRenderer()}
             </Group>
           )}
