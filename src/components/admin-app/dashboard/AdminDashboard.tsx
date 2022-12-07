@@ -4,7 +4,7 @@ import { AdminNavbar } from "../adminNavbar/AdminNavbar";
 import FulfilledOrders from "../fulfilledOrders/FulfilledOrders";
 import Messages from "../messages/Messages";
 import UnfulfilledOrders from "../unfulfilledOrders/UnfulfilledOrders";
-import styles from "./adminDashboard.module.css";
+import styles from "./admindashboard.module.css";
 import { QueryClient, QueryClientProvider } from "react-query";
 const queryClient = new QueryClient();
 
