@@ -1,20 +1,54 @@
 import { TextInput } from "@mantine/core";
 import React from "react";
+import io, { Socket } from "socket.io-client";
 import styles from "./talktoadmin.module.css";
+import { messageType } from "../../types/types";
+import { DefaultEventsMap } from "@socket.io/component-emitter";
+
+let socket: Socket<DefaultEventsMap, DefaultEventsMap>;
 
 const TalkToAdmin = () => {
-  const [messages, setMessages] = React.useState([]);
+  const [message, setMessage] = React.useState({
+    fromAdmin: false,
+    message: "",
+    sentAt: Date(),
+  });
+  const [messages, setMessages] = React.useState<messageType[]>([]);
   const handleSend = () => {
-    console.log("Hello World");
+    socket.emit("createdMessage", message);
+    setMessage({
+      fromAdmin: false,
+      message: "",
+      sentAt: Date(),
+    });
   };
   const allMessages = (() => {
-    return <div>{messages}</div>;
+    return (
+      <div>
+        {messages.map((message, index) => {
+          return <div key={index}>{message.message}</div>;
+        })}
+      </div>
+    );
   })();
+  const onChangeHandler = (e: any) => {
+    setMessage({ ...message, message: e.target.value, sentAt: Date() });
+  };
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
       handleSend();
     }
   };
+  const socketInitializer = async () => {
+    await fetch("/api/socket");
+    socket = io();
+    socket.on("newIncomingMessage", (msg: messageType) => {
+      setMessages([...messages, msg]);
+    });
+  };
+  React.useEffect(() => {
+    socketInitializer();
+  }, []);
   return (
     <div className={styles.mainContainer}>
       {allMessages}
@@ -24,6 +58,8 @@ const TalkToAdmin = () => {
         name="message"
         radius="xl"
         onKeyDown={handleKeyDown}
+        onChange={onChangeHandler}
+        value={message.message}
         rightSection={
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -31,11 +67,11 @@ const TalkToAdmin = () => {
             width="16"
             height="16"
             viewBox="0 0 24 24"
-            stroke-width="2"
+            strokeWidth="2"
             stroke="#00b341"
             fill="none"
-            stroke-linecap="round"
-            stroke-linejoin="round"
+            strokeLinecap="round"
+            strokeLinejoin="round"
             onClick={handleSend}
           >
             <path stroke="none" d="M0 0h24v24H0z" fill="none" />

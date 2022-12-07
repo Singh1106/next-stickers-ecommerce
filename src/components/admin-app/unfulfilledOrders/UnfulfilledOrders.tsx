@@ -32,8 +32,8 @@ const UnfulfilledOrders = () => {
             </tr>
           </thead>
           <tbody>
-            {data.users.map((user: any) => {
-              return <UserRow item={user} />;
+            {data.users.map((user: any, index: number) => {
+              return <UserRow key={index} item={user} />;
             })}
           </tbody>
         </Table>
