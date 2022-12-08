@@ -1,8 +1,10 @@
-import { NextApiResponse } from "next";
 import { Server } from "socket.io";
 import auth from "../../src/middleware/auth";
 import { NextApiRequestWithUser } from "../../src/types/types";
-import messageHandler from "../../src/utils/sockets/messageHandler";
+import User from "../../src/models/user";
+import connectDB from "../../src/middleware/connectDB";
+
+connectDB();
 
 const handler = (req: NextApiRequestWithUser, res: any) => {
   // It means that socket server was already initialised
@@ -11,12 +13,24 @@ const handler = (req: NextApiRequestWithUser, res: any) => {
     res.end();
     return;
   }
-
+  const user = req.user;
   const io = new Server(res.socket.server);
   res.socket.server.io = io;
 
   const onConnection = (socket: any) => {
-    messageHandler(io, socket);
+    socket.join(req.user.email);
+    const sendMessageToAdmin = async (msg: string) => {
+      user.messagesWithAdmin.push(msg);
+      io.to(req.user.email).emit("newIncomingMessage", msg);
+      await user.save();
+    };
+    const sendMessageFromAdmin = async (msg: string) => {
+      user.messagesWithAdmin.push(msg);
+      io.to(req.user.email).emit("newIncomingMessage", msg);
+      await user.save();
+    };
+    socket.on("sendMessageFromAdmin", sendMessageFromAdmin);
+    socket.on("sendMessageToAdmin", sendMessageToAdmin);
   };
 
   // Define actions inside

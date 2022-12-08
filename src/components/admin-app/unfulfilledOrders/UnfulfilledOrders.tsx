@@ -2,13 +2,7 @@ import { ScrollArea, Table } from "@mantine/core";
 import React from "react";
 import { UserRow } from "../components/userRow/UserRow";
 import { getUnFulfilledOrdersUsers } from "./actions";
-import {
-  useQuery,
-  useMutation,
-  useQueryClient,
-  QueryClient,
-  QueryClientProvider,
-} from "react-query";
+import { useQuery } from "react-query";
 const UnfulfilledOrders = () => {
   const { data, isLoading, isError } = useQuery(
     "getUnFulfilledOrdersUsers",

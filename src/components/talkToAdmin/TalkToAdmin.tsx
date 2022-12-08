@@ -1,5 +1,5 @@
 import { TextInput } from "@mantine/core";
-import React from "react";
+import React, { useEffect } from "react";
 import io, { Socket } from "socket.io-client";
 import styles from "./talktoadmin.module.css";
 import { messageType } from "../../types/types";
@@ -8,31 +8,22 @@ import { DefaultEventsMap } from "@socket.io/component-emitter";
 let socket: Socket<DefaultEventsMap, DefaultEventsMap>;
 
 const TalkToAdmin = () => {
-  const [message, setMessage] = React.useState({
+  const [message, setMessage] = React.useState<messageType>({
     fromAdmin: false,
     message: "",
-    sentAt: Date(),
+    sentAt: new Date(),
   });
   const [messages, setMessages] = React.useState<messageType[]>([]);
   const handleSend = () => {
-    socket.emit("createdMessage", message);
+    socket.emit("sendMessageToAdmin", message);
     setMessage({
       fromAdmin: false,
       message: "",
-      sentAt: Date(),
+      sentAt: new Date(),
     });
   };
-  const allMessages = (() => {
-    return (
-      <div>
-        {messages.map((message, index) => {
-          return <div key={index}>{message.message}</div>;
-        })}
-      </div>
-    );
-  })();
   const onChangeHandler = (e: any) => {
-    setMessage({ ...message, message: e.target.value, sentAt: Date() });
+    setMessage({ ...message, message: e.target.value, sentAt: new Date() });
   };
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
@@ -43,6 +34,8 @@ const TalkToAdmin = () => {
     await fetch("/api/socket");
     socket = io();
     socket.on("newIncomingMessage", (msg: messageType) => {
+      console.log(messages);
+      console.log("newIncommingMessage", msg);
       setMessages([...messages, msg]);
     });
   };
@@ -51,7 +44,9 @@ const TalkToAdmin = () => {
   }, []);
   return (
     <div className={styles.mainContainer}>
-      {allMessages}
+      {messages.map((message, index) => {
+        return <div key={index}>{message.message}</div>;
+      })}
       <TextInput
         label="Type your message"
         placeholder="Message entry."
