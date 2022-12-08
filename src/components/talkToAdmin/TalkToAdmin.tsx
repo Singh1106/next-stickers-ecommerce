@@ -4,6 +4,7 @@ import io, { Socket } from "socket.io-client";
 import styles from "./talktoadmin.module.css";
 import { messageType } from "../../types/types";
 import { DefaultEventsMap } from "@socket.io/component-emitter";
+import { getInitialMessages } from "./actions";
 
 let socket: Socket<DefaultEventsMap, DefaultEventsMap>;
 
@@ -30,6 +31,13 @@ const TalkToAdmin = () => {
       handleSend();
     }
   };
+
+  const getMessages = async () => {
+    const res = await getInitialMessages();
+    if (res?.code === 1) {
+      setMessages(res.messages);
+    }
+  };
   const socketInitializer = async () => {
     await fetch("/api/socket");
     socket = io();
@@ -39,14 +47,34 @@ const TalkToAdmin = () => {
       setMessages([...messages, msg]);
     });
   };
-  React.useEffect(() => {
+  useEffect(() => {
+    getMessages();
     socketInitializer();
   }, []);
   return (
     <div className={styles.mainContainer}>
-      {messages.map((message, index) => {
-        return <div key={index}>{message.message}</div>;
-      })}
+      <div className={styles.messages}>
+        {messages.map((message, index) => {
+          if (message.fromAdmin) {
+            return (
+              <div key={index} className={styles.fromAdmin}>
+                From Admin:
+                <br />
+                <div className={styles.adminMessage}>{message.message}</div>
+                <br />
+              </div>
+            );
+          }
+          return (
+            <div key={index} className={styles.fromUser}>
+              From You:
+              <br />
+              <div className={styles.userMessage}>{message.message}</div>
+              <br />
+            </div>
+          );
+        })}
+      </div>
       <TextInput
         label="Type your message"
         placeholder="Message entry."
