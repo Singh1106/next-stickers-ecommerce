@@ -5,6 +5,7 @@ import styles from "./talktoadmin.module.css";
 import { messageType } from "../../types/types";
 import { DefaultEventsMap } from "@socket.io/component-emitter";
 import { getInitialMessages } from "./actions";
+import _ from "lodash";
 
 let socket: Socket<DefaultEventsMap, DefaultEventsMap>;
 
@@ -16,12 +17,14 @@ const TalkToAdmin = () => {
   });
   const [messages, setMessages] = React.useState<messageType[]>([]);
   const handleSend = () => {
-    socket.emit("sendMessageToAdmin", message);
-    setMessage({
-      fromAdmin: false,
-      message: "",
-      sentAt: new Date(),
-    });
+    if (message.message !== "") {
+      socket.emit("sendMessageToAdmin", message);
+      setMessage({
+        fromAdmin: false,
+        message: "",
+        sentAt: new Date(),
+      });
+    }
   };
   const onChangeHandler = (e: any) => {
     setMessage({ ...message, message: e.target.value, sentAt: new Date() });
@@ -35,16 +38,16 @@ const TalkToAdmin = () => {
   const getMessages = async () => {
     const res = await getInitialMessages();
     if (res?.code === 1) {
-      setMessages(res.messages);
+      setMessages(_.reverse(res.messages));
     }
   };
   const socketInitializer = async () => {
     await fetch("/api/socket");
     socket = io();
-    socket.on("newIncomingMessage", (msg: messageType) => {
+    socket.on("newIncomingMessage", (msg: messageType[]) => {
       console.log(messages);
       console.log("newIncommingMessage", msg);
-      setMessages([...messages, msg]);
+      setMessages(_.reverse(msg));
     });
   };
   useEffect(() => {
@@ -58,7 +61,7 @@ const TalkToAdmin = () => {
           if (message.fromAdmin) {
             return (
               <div key={index} className={styles.fromAdmin}>
-                From Admin:
+                {index + 1} ) From Admin:
                 <br />
                 <div className={styles.adminMessage}>{message.message}</div>
                 <br />
@@ -67,7 +70,7 @@ const TalkToAdmin = () => {
           }
           return (
             <div key={index} className={styles.fromUser}>
-              From You:
+              {index + 1} ) From You:
               <br />
               <div className={styles.userMessage}>{message.message}</div>
               <br />

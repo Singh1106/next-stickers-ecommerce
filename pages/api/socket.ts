@@ -16,19 +16,19 @@ const handler = (req: NextApiRequestWithUser, res: any) => {
   const user = req.user;
   const io = new Server(res.socket.server);
   res.socket.server.io = io;
-
+  const sendMessageToAdmin = async (msg: string) => {
+    const updatedMessages = user.messagesWithAdmin;
+    updatedMessages.push(msg);
+    user.messagesWithAdmin = updatedMessages;
+    io.to(req.user.email).emit("newIncomingMessage", updatedMessages);
+    // Another jugaad. Why am i sending back all the messages,
+    // somehow one msg is not doing the job.
+    await user.save();
+  };
+  const sendMessageFromAdmin = async (msg: string) => {};
   const onConnection = (socket: any) => {
     socket.join(req.user.email);
-    const sendMessageToAdmin = async (msg: string) => {
-      user.messagesWithAdmin.push(msg);
-      io.to(req.user.email).emit("newIncomingMessage", msg);
-      await user.save();
-    };
-    const sendMessageFromAdmin = async (msg: string) => {
-      user.messagesWithAdmin.push(msg);
-      io.to(req.user.email).emit("newIncomingMessage", msg);
-      await user.save();
-    };
+
     socket.on("sendMessageFromAdmin", sendMessageFromAdmin);
     socket.on("sendMessageToAdmin", sendMessageToAdmin);
   };
