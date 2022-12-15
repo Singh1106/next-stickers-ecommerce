@@ -15,10 +15,16 @@ const handler = async (
     case "GET":
       try {
         const users = await User.find();
+        const usersWithMsgs = users.filter((user) => {
+          if (user.messagesWithAdmin.length === 0) {
+            return false;
+          }
+          return true;
+        });
         res.json({
           msg: "Successfully got back the users",
           code: 1,
-          users,
+          users: usersWithMsgs,
         });
       } catch (e) {
         res.status(500).send(e);

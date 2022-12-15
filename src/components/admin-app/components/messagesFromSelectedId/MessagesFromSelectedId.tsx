@@ -6,7 +6,6 @@ interface Props {
 }
 
 const MessagesFromSelectedId = ({ messages }: Props) => {
-  console.log(messages);
   return <div>{JSON.stringify(messages)}</div>;
 };
 

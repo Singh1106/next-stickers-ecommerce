@@ -19,6 +19,7 @@ const TalkToAdmin = () => {
   const handleSend = () => {
     if (message.message !== "") {
       socket.emit("sendMessageToAdmin", message);
+      setMessages([message, ...messages]);
       setMessage({
         fromAdmin: false,
         message: "",
@@ -44,10 +45,9 @@ const TalkToAdmin = () => {
   const socketInitializer = async () => {
     await fetch("/api/socket");
     socket = io();
-    socket.on("newIncomingMessage", (msg: messageType[]) => {
-      console.log(messages);
-      console.log("newIncommingMessage", msg);
-      setMessages(_.reverse(msg));
+    socket.on("newIncomingMessageFromAdmin", (msg: messageType[]) => {
+      console.log(msg);
+      // setMessages(_.reverse(msg));
     });
   };
   useEffect(() => {
@@ -57,7 +57,7 @@ const TalkToAdmin = () => {
   return (
     <div className={styles.mainContainer}>
       <div className={styles.messages}>
-        {messages.map((message, index) => {
+        {_.reverse(messages).map((message, index) => {
           if (message.fromAdmin) {
             return (
               <div key={index} className={styles.fromAdmin}>

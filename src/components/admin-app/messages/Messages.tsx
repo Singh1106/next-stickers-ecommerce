@@ -7,6 +7,7 @@ import {
   User,
 } from "../components/messagesSidebar/MessagesSidebar";
 import { getMessagesForAdmin } from "./actions";
+import styles from "./messages.module.css";
 
 const Messages = () => {
   const { data, isLoading } = useQuery(
@@ -15,21 +16,24 @@ const Messages = () => {
   );
   const [selectedId, setSelectedId] = React.useState("");
   const [messagesForSI, setMessagesForSI] = React.useState<messageType[]>([]);
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
   React.useEffect(() => {
-    if (data) {
+    if (data?.users) {
       console.log(selectedId);
       const filteredUser = data.users.filter((user: User) => {
         return user._id === selectedId;
       });
       console.log(filteredUser[0]);
-      setMessagesForSI(filteredUser[0].messagesWithAdmin);
+      if (filteredUser.length > 0) {
+        setMessagesForSI(filteredUser[0].messagesWithAdmin);
+      }
     }
   }, [selectedId]);
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
   return (
-    <div>
+    <div className={styles.messages}>
       <MessagesSidebar users={data.users} setSelectedId={setSelectedId} />
       <MessagesFromSelectedId messages={messagesForSI} />
     </div>

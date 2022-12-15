@@ -102,7 +102,7 @@ export const MessagesSidebar = ({
       className={cx(classes.link, {
         [classes.linkActive]: item._id === active,
       })}
-      key={item.label}
+      key={item._id}
       onClick={() => {
         setActive(item._id);
         setSelectedId(item._id);
