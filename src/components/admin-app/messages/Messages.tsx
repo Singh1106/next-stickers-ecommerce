@@ -18,11 +18,9 @@ const Messages = () => {
   const [messagesForSI, setMessagesForSI] = React.useState<messageType[]>([]);
   React.useEffect(() => {
     if (data?.users) {
-      console.log(selectedId);
       const filteredUser = data.users.filter((user: User) => {
         return user._id === selectedId;
       });
-      console.log(filteredUser[0]);
       if (filteredUser.length > 0) {
         setMessagesForSI(filteredUser[0].messagesWithAdmin);
       }
@@ -35,7 +33,14 @@ const Messages = () => {
   return (
     <div className={styles.messages}>
       <MessagesSidebar users={data.users} setSelectedId={setSelectedId} />
-      <MessagesFromSelectedId messages={messagesForSI} />
+      {selectedId && (
+        <MessagesFromSelectedId
+          messages={messagesForSI}
+          setMessages={setMessagesForSI}
+          selectedId={selectedId}
+          email="staticemail"
+        />
+      )}
     </div>
   );
 };

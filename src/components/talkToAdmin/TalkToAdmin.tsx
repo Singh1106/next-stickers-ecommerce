@@ -6,6 +6,7 @@ import { messageType } from "../../types/types";
 import { DefaultEventsMap } from "@socket.io/component-emitter";
 import { getInitialMessages } from "./actions";
 import _ from "lodash";
+import { toast } from "react-toastify";
 
 let socket: Socket<DefaultEventsMap, DefaultEventsMap>;
 
@@ -19,7 +20,7 @@ const TalkToAdmin = () => {
   const handleSend = () => {
     if (message.message !== "") {
       socket.emit("sendMessageToAdmin", message);
-      setMessages([message, ...messages]);
+      setMessages([...messages, message]);
       setMessage({
         fromAdmin: false,
         message: "",
@@ -39,15 +40,17 @@ const TalkToAdmin = () => {
   const getMessages = async () => {
     const res = await getInitialMessages();
     if (res?.code === 1) {
-      setMessages(_.reverse(res.messages));
+      setMessages(res.messages);
     }
   };
   const socketInitializer = async () => {
     await fetch("/api/socket");
     socket = io();
-    socket.on("newIncomingMessageFromAdmin", (msg: messageType[]) => {
-      console.log(msg);
-      // setMessages(_.reverse(msg));
+    socket.on("newIncomingMessageFromAdmin", (msgs: messageType[]) => {
+      console.log(msgs);
+
+      setMessages(msgs);
+      toast.success("Got a message from admin.");
     });
   };
   useEffect(() => {
@@ -57,7 +60,7 @@ const TalkToAdmin = () => {
   return (
     <div className={styles.mainContainer}>
       <div className={styles.messages}>
-        {_.reverse(messages).map((message, index) => {
+        {messages.map((message, index) => {
           if (message.fromAdmin) {
             return (
               <div key={index} className={styles.fromAdmin}>
