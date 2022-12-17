@@ -3,8 +3,7 @@ import auth from "../../src/middleware/auth";
 import { NextApiRequestWithUser } from "../../src/types/types";
 import User from "../../src/models/user";
 import connectDB from "../../src/middleware/connectDB";
-import { Socket } from "dgram";
-
+import { Server as NetServer } from "http";
 connectDB();
 
 const handler = (req: NextApiRequestWithUser, res: any) => {
@@ -15,7 +14,10 @@ const handler = (req: NextApiRequestWithUser, res: any) => {
     return;
   }
   let user = req.user;
-  const io = new Server(res.socket.server);
+  const httpServer: NetServer = res.socket.server as any;
+  const io = new Server(httpServer, {
+    path: "/api/socket",
+  });
   res.socket.server.io = io;
   let roomUser: any;
 
@@ -26,6 +28,7 @@ const handler = (req: NextApiRequestWithUser, res: any) => {
     }
 
     const sendMessageToAdmin = async (msg: string) => {
+      console.log(socket.rooms);
       user.messagesWithAdmin.push(msg);
       socket
         .to(user.email)
@@ -33,6 +36,8 @@ const handler = (req: NextApiRequestWithUser, res: any) => {
       user = await user.save();
     };
     const sendMessageFromAdmin = async (msg: string) => {
+      console.log(socket.rooms);
+
       roomUser.messagesWithAdmin.push(msg);
       socket
         .to(roomUser.email)
