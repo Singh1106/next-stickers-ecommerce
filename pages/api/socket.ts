@@ -20,7 +20,8 @@ const handler = (req: NextApiRequestWithUser, res: any) => {
   let roomUser: any;
 
   const onConnection = (socket: any) => {
-    if (!user.isAdmin) {
+    if (!req.user.isAdmin) {
+      console.log(req.user.email);
       socket.join(req.user.email);
     }
 
@@ -30,8 +31,6 @@ const handler = (req: NextApiRequestWithUser, res: any) => {
         .to(user.email)
         .emit("newIncomingMessageToAdmin", user.messagesWithAdmin);
       user = await user.save();
-
-      roomUser = await User.findById(roomUser._id); //updatring room user ref as well
     };
     const sendMessageFromAdmin = async (msg: string) => {
       roomUser.messagesWithAdmin.push(msg);
@@ -41,8 +40,6 @@ const handler = (req: NextApiRequestWithUser, res: any) => {
       // another jugaad, sending all msgs, because apprently sending one message,
       // is not doing the job. dk why.
       roomUser = await roomUser.save();
-
-      user = await User.findById(user._id); // updating user ref as well
     };
     const chooseUserRoom = async (id: string) => {
       roomUser = await User.findById(id);
