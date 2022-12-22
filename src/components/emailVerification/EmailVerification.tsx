@@ -3,6 +3,7 @@ import { useRouter } from "next/navigation";
 import React from "react";
 import useAuthStore from "../../store";
 import { sendVerificationEmail } from "./actions";
+import styles from "./emailVerification.module.css";
 
 const EmailVerification = () => {
   const router = useRouter();
@@ -35,18 +36,20 @@ const EmailVerification = () => {
   };
   return (
     <>
-      <div>
+      <div className={styles.container}>
         Oh no, seems like {user?.email} is not verified. Wanna verify it? You
         better, you cant do shit without verifying it.
       </div>
-      {verificationMailSent && (
-        <div>
-          An email has been sent, You can verify till {expiryVerificationMail}
-        </div>
-      )}
-      <Button onClick={verifyItHandler}>
-        {verificationMailSent && `Re`}send verification email.
-      </Button>
+      <div className={styles.wrapper}>
+        {verificationMailSent && (
+          <div>
+            An email has been sent, You can verify till {expiryVerificationMail}
+          </div>
+        )}
+        <Button onClick={verifyItHandler}>
+          {verificationMailSent && `Re`}send verification email.
+        </Button>
+      </div>
     </>
   );
 };

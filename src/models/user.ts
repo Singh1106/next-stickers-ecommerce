@@ -90,8 +90,31 @@ const userSchema = new Schema(
           type: Number,
           required: true,
         },
+        status: {
+          type: String,
+          requied: true,
+          default: "Accepted",
+        },
         orderedAt: {
           type: Date,
+          required: true,
+        },
+      },
+    ],
+    messagesWithAdmin: [
+      {
+        fromAdmin: {
+          type: Boolean,
+          required: true,
+          default: false,
+        },
+        sentAt: {
+          type: Date,
+          required: true,
+          default: new Date(),
+        },
+        message: {
+          type: String,
           required: true,
         },
       },

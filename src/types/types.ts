@@ -1,5 +1,4 @@
 import type { NextApiRequest } from "next";
-import { StringLiteral } from "typescript";
 
 export interface NextApiRequestWithUser extends NextApiRequest {
   user: any;
@@ -23,6 +22,12 @@ export interface cartItem {
 export interface initialState {
   user: User;
   userEntryType: number;
-  isLoggedIn: boolean;
+  isUserLoggedIn: boolean;
   cart: cartItem[];
+}
+
+export interface messageType {
+  fromAdmin: boolean;
+  message: string;
+  sentAt: Date;
 }

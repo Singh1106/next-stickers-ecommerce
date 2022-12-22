@@ -1,27 +1,30 @@
 import type { NextApiResponse } from "next";
 import type { NextApiRequestWithUser } from "../../../src/types/types";
+import connectDB from "../../../src/middleware/connectDB";
 import auth from "../../../src/middleware/auth";
+import User from "../../../src/models/user";
 
 const handler = async (
   req: NextApiRequestWithUser,
   res: NextApiResponse<any>
 ) => {
   const { method } = req;
+  await connectDB();
 
   switch (method) {
-    case "GET":
+    case "POST":
       try {
-        if (req.user.isAdmin) {
-          return res.json({
-            msg: "Successfully got user",
-            code: 2,
-            user: req.user,
-          });
-        }
+        const { userId, orders, status } = req.body;
+        const user = await User.findById(userId);
+        user.orders.forEach((order: any) => {
+          if (orders.includes(order.id)) {
+            order.status = status;
+          }
+        });
+        await user.save();
         res.json({
-          msg: "Successfully got user",
+          msg: "Successfully updated the orders",
           code: 1,
-          user: req.user,
         });
       } catch (e) {
         res.status(500).send(e);

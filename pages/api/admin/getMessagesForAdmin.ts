@@ -1,27 +1,30 @@
 import type { NextApiResponse } from "next";
 import type { NextApiRequestWithUser } from "../../../src/types/types";
+import connectDB from "../../../src/middleware/connectDB";
 import auth from "../../../src/middleware/auth";
+import User from "../../../src/models/user";
 
 const handler = async (
   req: NextApiRequestWithUser,
   res: NextApiResponse<any>
 ) => {
   const { method } = req;
+  await connectDB();
 
   switch (method) {
     case "GET":
       try {
-        if (req.user.isAdmin) {
-          return res.json({
-            msg: "Successfully got user",
-            code: 2,
-            user: req.user,
-          });
-        }
+        const users = await User.find();
+        const usersWithMsgs = users.filter((user) => {
+          if (user.messagesWithAdmin.length === 0) {
+            return false;
+          }
+          return true;
+        });
         res.json({
-          msg: "Successfully got user",
+          msg: "Successfully got back the users",
           code: 1,
-          user: req.user,
+          users: usersWithMsgs,
         });
       } catch (e) {
         res.status(500).send(e);
