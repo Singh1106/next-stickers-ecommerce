@@ -7,10 +7,10 @@ export enum UserEntryTypes {
   register = 2,
 }
 
-const useAuthStore: any = create(
+const useAuthStore = create(
   devtools((set) => ({
     user: null,
-    isLoggedIn: false,
+    isUserLoggedIn: false,
     userEntryType: UserEntryTypes.login,
     cart: [],
     orders: [],
@@ -18,6 +18,7 @@ const useAuthStore: any = create(
     activeProductPage: 1,
     verificationMailSent: false,
     expiryVerificationMail: new Date(),
+    isAdmin: false,
     setUser: (newUser: User) =>
       set((state: initialState) => ({
         ...state,
@@ -28,10 +29,10 @@ const useAuthStore: any = create(
         ...state,
         userEntryType: newUserEntryType,
       })),
-    setIsLoggedIn: (newIsLoggedIn: boolean) =>
+    setIsUserLoggedIn: (newIsUserLoggedIn: boolean) =>
       set((state: initialState) => ({
         ...state,
-        isLoggedIn: newIsLoggedIn,
+        isUserLoggedIn: newIsUserLoggedIn,
       })),
     setCart: (newCart: cartItem[]) =>
       set((state: initialState) => ({
@@ -63,17 +64,23 @@ const useAuthStore: any = create(
         ...state,
         expiryVerificationMail: setExpiryVerificationMail,
       })),
+    setIsAdmin: (newIsAdmin: Boolean) =>
+      set((state: initialState) => ({
+        ...state,
+        isAdmin: newIsAdmin,
+      })),
     reset: () =>
       set((state: initialState) => ({
         ...state,
         user: null,
-        isLoggedIn: false,
+        isUserLoggedIn: false,
         userEntryType: UserEntryTypes.login,
         cart: [],
         orders: [],
         products: [],
         activeProductPage: 1,
         verificationMailSent: false,
+        isAdmin: false,
       })),
   }))
 );

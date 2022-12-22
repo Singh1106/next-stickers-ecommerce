@@ -101,6 +101,24 @@ const userSchema = new Schema(
         },
       },
     ],
+    messagesWithAdmin: [
+      {
+        fromAdmin: {
+          type: Boolean,
+          required: true,
+          default: false,
+        },
+        sentAt: {
+          type: Date,
+          required: true,
+          default: new Date(),
+        },
+        message: {
+          type: String,
+          required: true,
+        },
+      },
+    ],
     tokens: [
       {
         token: {

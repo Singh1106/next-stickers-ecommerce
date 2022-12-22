@@ -41,9 +41,10 @@ const useStyles = createStyles((theme) => ({
 
 export function HeaderMegaMenu() {
   const router = useRouter();
-  const { isLoggedIn, reset } = useAuthStore((state: any) => ({
-    isLoggedIn: state.isLoggedIn,
+  const { isUserLoggedIn, reset, isAdmin } = useAuthStore((state: any) => ({
+    isUserLoggedIn: state.isUserLoggedIn,
     reset: state.reset,
+    isAdmin: state.isAdmin,
   }));
   const { classes } = useStyles();
 
@@ -88,11 +89,41 @@ export function HeaderMegaMenu() {
     );
   };
 
+  if (isAdmin) {
+    return (
+      <Box pb={120}>
+        <Header height={60} px="md">
+          <Group position="apart" sx={{ height: "100%" }}>
+            <Group
+              sx={{ height: "100%" }}
+              spacing={0}
+              className={classes.hiddenMobile}
+            >
+              <Link href="/admin-app/dashboard" className={classes.link}>
+                Home
+              </Link>
+              {infoRenderer()}
+            </Group>
+            <Group
+              sx={{ height: "100%" }}
+              spacing={0}
+              className={classes.hiddenMobile}
+            >
+              <Button onClick={logoutHandler} variant="subtle" color="dark">
+                Logout
+              </Button>
+            </Group>
+          </Group>
+        </Header>
+      </Box>
+    );
+  }
+
   return (
     <Box pb={120}>
       <Header height={60} px="md">
         <Group position="apart" sx={{ height: "100%" }}>
-          {isLoggedIn && (
+          {isUserLoggedIn && (
             <Group
               sx={{ height: "100%" }}
               spacing={0}
@@ -107,6 +138,9 @@ export function HeaderMegaMenu() {
               <Link href="/settings" className={classes.link}>
                 Settings
               </Link>
+              <Link href="/talktoadmin" className={classes.link}>
+                Talk to Admin
+              </Link>
               {infoRenderer()}
             </Group>
           )}
@@ -115,7 +149,7 @@ export function HeaderMegaMenu() {
             spacing={0}
             className={classes.hiddenMobile}
           >
-            {isLoggedIn ? (
+            {isUserLoggedIn ? (
               <>
                 <Link href="/orders" className={classes.link}>
                   Orders

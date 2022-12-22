@@ -49,6 +49,12 @@ export const EmailEntryScreen = () => {
     });
     router.push("/2ndScreen");
   };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      onEnterEmailHandler();
+    }
+  };
   return (
     <>
       <div className={styles.container}>
@@ -61,6 +67,7 @@ export const EmailEntryScreen = () => {
           placeholder="Email entry."
           name="email"
           onChange={onChangeHandler}
+          onKeyDown={handleKeyDown}
         />
         <Button
           className={styles.goaheadbtn}

@@ -8,44 +8,58 @@ const WPR = (Component: any) => {
   const Auth = (props: any) => {
     const router = useRouter();
     const {
-      isLoggedIn,
-      setIsLoggedIn,
+      isUserLoggedIn,
+      setIsUserLoggedIn,
       reset,
       setUser,
       setCart,
       setOrders,
       user,
+      setIsAdmin,
+      isAdmin,
     } = useAuthStore((state: any) => ({
-      isLoggedIn: state.isLoggedIn,
-      setIsLoggedIn: state.setIsLoggedIn,
+      isUserLoggedIn: state.isUserLoggedIn,
+      setIsUserLoggedIn: state.setIsUserLoggedIn,
       reset: state.reset,
       setUser: state.setUser,
       setCart: state.setCart,
       setOrders: state.setOrders,
       user: state.user,
+      setIsAdmin: state.setIsAdmin,
+      isAdmin: state.isAdmin,
     }));
+    let isAdminWhichIsNotState = false;
     const tryToGetUser = async () => {
       const res = await getUser();
-      if (res?.code !== 1) {
+      if (res?.code < 1) {
         reset();
         return router.push("/");
       }
-      setUser({
-        name: res?.user.name,
-        email: res?.user.email,
-        verifiedEmail: res?.user.verifiedEmail,
-      });
-      setIsLoggedIn(true);
-      setCart(res?.user?.cart);
-      setOrders(res?.user?.orders);
+      if (res?.code === 1) {
+        setUser({
+          name: res?.user.name,
+          email: res?.user.email,
+          verifiedEmail: res?.user.verifiedEmail,
+        });
+        setIsUserLoggedIn(true);
+        setCart(res?.user?.cart);
+        setOrders(res?.user?.orders);
+      }
+      if (res?.code === 2) {
+        setUser({
+          name: res?.user.name,
+        });
+        setIsAdmin(true);
+        isAdminWhichIsNotState = true;
+      }
     };
     const emailVerificationChecker = () => {
-      if (user && !user?.verifiedEmail) {
+      if (user && !user?.verifiedEmail && !isAdminWhichIsNotState) {
         return router.push("/emailVerification");
       }
     };
     const privacyChecker = async () => {
-      if (!isLoggedIn) {
+      if (!isUserLoggedIn) {
         await tryToGetUser();
       }
       emailVerificationChecker();
@@ -53,10 +67,14 @@ const WPR = (Component: any) => {
 
     React.useEffect(() => {
       privacyChecker();
-    }, [isLoggedIn]);
+    }, [isUserLoggedIn]);
 
     // If user is logged in, return original component
-    return isLoggedIn ? <Component {...props} /> : <EmailEntryScreen />;
+    return isUserLoggedIn || isAdmin ? (
+      <Component {...props} />
+    ) : (
+      <EmailEntryScreen />
+    );
   };
   return Auth;
 };
